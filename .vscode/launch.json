@@ -1,27 +1,30 @@
 {
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
 
         {
-            "name": "g++.exe - 生成和调试活动文件",
+            "name": "(gdb) Launch",
+            "preLaunchTask": "g++.exe build active file",
             "type": "cppdbg",
             "request": "launch",
-            "program": "D:\\exe\\${fileBasenameNoExtension}.exe",//只需要把E:\\C++改成自己代码的工作路径即可
+            "program": "${fileDirname}\\..\\build\\${fileBasenameNoExtension}.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "externalConsole":  false,
+            "externalConsole": true,
             "MIMode": "gdb",
-            "miDebuggerPath": "C:\\mingw64\\bin\\gdb.exe",//把E:\\mingw64换成自己的mingw64存放的路径
+            "miDebuggerPath": "F:\\mingw64\\bin\\gdb.exe",
             "setupCommands": [
                 {
-                    "description": "为 gdb 启用整齐打印",
+                    "description": "Enable pretty-printing for gdb",
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 }
-            ],
-            "preLaunchTask": "C/C++: g++.exe 生成活动文件",
+            ]
         }
     ]
 }
