@@ -11,7 +11,7 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}\\..\\build\\${fileBasenameNoExtension}.exe"
+                "${fileDirname}\\..\\build\\bin\\LearnVulkan.exe"
             ],
             "options": {
                 "cwd": "F:/mingw64/bin"

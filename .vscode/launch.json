@@ -10,7 +10,7 @@
             "preLaunchTask": "g++.exe build active file",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}\\..\\build\\${fileBasenameNoExtension}.exe",
+            "program": "${fileDirname}\\..\\build\\bin\\LearnVulkan.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
