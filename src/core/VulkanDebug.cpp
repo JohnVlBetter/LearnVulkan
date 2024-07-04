@@ -1,11 +1,3 @@
-/*
- * Vulkan examples debug wrapper
- *
- * Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
- *
- * This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
- */
-
 #include "VulkanDebug.h"
 #include <iostream>
 
@@ -60,21 +52,12 @@ namespace vks
 			else {
 				debugMessage << prefix << "[" << pCallbackData->messageIdNumber << "] : " << pCallbackData->pMessage;
 			}
-
-#if defined(__ANDROID__)
-			if (messageSeverity >= VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT) {
-				LOGE("%s", debugMessage.str().c_str());
-			} else {
-				LOGD("%s", debugMessage.str().c_str());
-			}
-#else
 			if (messageSeverity >= VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT) {
 				std::cerr << debugMessage.str() << "\n\n";
 			} else {
 				std::cout << debugMessage.str() << "\n\n";
 			}
 			fflush(stdout);
-#endif
 
 
 			// The return value of this callback controls whether the Vulkan call that caused the validation message will be aborted or not
