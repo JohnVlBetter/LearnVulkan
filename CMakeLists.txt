@@ -15,10 +15,13 @@ include_directories(3rd/vulkan/Include)
 
 include_directories(3rd/glfw/include)
 include_directories(3rd/glfw/lib-mingw-w64)
+include_directories(3rd/ktx/include)
+include_directories(3rd/ktx/other_include)
 #set(GLFW_DLL_DIR ${CMAKE_SOURCE_DIR}/3rd/glfw/lib-mingw-w64/glfw3.dll)
 #message("${GLFW_DLL_DIR}")
 
 link_directories(3rd/glfw/lib-mingw-w64)
+include_directories(src/core)
 
 #vulkan
 find_library(Vulkan_LIBRARY NAMES vulkan-1 vulkan PATHS ${CMAKE_SOURCE_DIR}/3rd/vulkan/Lib)
