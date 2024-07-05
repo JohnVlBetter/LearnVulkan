@@ -25,7 +25,7 @@ IF(Vulkan_LIBRARY)
 	MESSAGE("Using bundled Vulkan library version")
 ENDIF()
 
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DVK_USE_PLATFORM_WIN32_KHR")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DVK_USE_PLATFORM_WIN32_KHR")
 IF(NOT Vulkan_FOUND)
 	message(FATAL_ERROR "Could not find Vulkan library!")
 ELSE()
