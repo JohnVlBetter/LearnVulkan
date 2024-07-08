@@ -1,36 +1,28 @@
-/*
-* Vulkan Example - Using different pipelines in a single renderpass
-* 
-* This sample shows how to setup multiple graphics pipelines and how to use them for drawing objects with differring visuals
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
-class VulkanExample: public VulkanExampleBase
+class VulkanExample : public VulkanExampleBase
 {
 public:
 	vkglTF::Model scene;
 
-	struct UniformData {
+	struct UniformData
+	{
 		glm::mat4 projection;
 		glm::mat4 modelView;
-		glm::vec4 lightPos{ 0.0f, 2.0f, 1.0f, 0.0f };
+		glm::vec4 lightPos{0.0f, 2.0f, 1.0f, 0.0f};
 	} uniformData;
 	vks::Buffer uniformBuffer;
 
-	VkPipelineLayout pipelineLayout{ VK_NULL_HANDLE };
-	VkDescriptorSet descriptorSet{ VK_NULL_HANDLE };
-	VkDescriptorSetLayout descriptorSetLayout{ VK_NULL_HANDLE };
+	VkPipelineLayout pipelineLayout{VK_NULL_HANDLE};
+	VkDescriptorSet descriptorSet{VK_NULL_HANDLE};
+	VkDescriptorSetLayout descriptorSetLayout{VK_NULL_HANDLE};
 
-	struct {
-		VkPipeline phong{ VK_NULL_HANDLE };
-		VkPipeline wireframe{ VK_NULL_HANDLE };
-		VkPipeline toon{ VK_NULL_HANDLE };
+	struct
+	{
+		VkPipeline phong{VK_NULL_HANDLE};
+		VkPipeline wireframe{VK_NULL_HANDLE};
+		VkPipeline toon{VK_NULL_HANDLE};
 	} pipelines;
 
 	VulkanExample() : VulkanExampleBase()
@@ -45,7 +37,8 @@ public:
 
 	~VulkanExample()
 	{
-		if (device) {
+		if (device)
+		{
 			vkDestroyPipeline(device, pipelines.phong, nullptr);
 			if (enabledFeatures.fillModeNonSolid)
 			{
@@ -64,12 +57,14 @@ public:
 	virtual void getEnabledFeatures()
 	{
 		// Fill mode non solid is required for wireframe display
-		if (deviceFeatures.fillModeNonSolid) {
+		if (deviceFeatures.fillModeNonSolid)
+		{
 			enabledFeatures.fillModeNonSolid = VK_TRUE;
 		};
 
 		// Wide lines must be present for line width > 1.0f
-		if (deviceFeatures.wideLines) {
+		if (deviceFeatures.wideLines)
+		{
 			enabledFeatures.wideLines = VK_TRUE;
 		}
 	}
@@ -80,7 +75,7 @@ public:
 
 		VkClearValue clearValues[2];
 		clearValues[0].color = defaultClearColor;
-		clearValues[1].depthStencil = { 1.0f, 0 };
+		clearValues[1].depthStencil = {1.0f, 0};
 
 		VkRenderPassBeginInfo renderPassBeginInfo = vks::initializers::renderPassBeginInfo();
 		renderPassBeginInfo.renderPass = renderPass;
@@ -102,32 +97,36 @@ public:
 			VkViewport viewport = vks::initializers::viewport((float)width, (float)height, 0.0f, 1.0f);
 			vkCmdSetViewport(drawCmdBuffers[i], 0, 1, &viewport);
 
-			VkRect2D scissor = vks::initializers::rect2D(width, height,	0, 0);
+			VkRect2D scissor = vks::initializers::rect2D(width, height, 0, 0);
 			vkCmdSetScissor(drawCmdBuffers[i], 0, 1, &scissor);
 
 			vkCmdBindDescriptorSets(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSet, 0, NULL);
 			scene.bindBuffers(drawCmdBuffers[i]);
 
 			// Left : Render the scene using the solid colored pipeline with phong shading
-			viewport.width = (float)width / 3.0f;
+			viewport.width = (float)width / 4.0f;
 			vkCmdSetViewport(drawCmdBuffers[i], 0, 1, &viewport);
 			vkCmdBindPipeline(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelines.phong);
 			vkCmdSetLineWidth(drawCmdBuffers[i], 1.0f);
 			scene.draw(drawCmdBuffers[i]);
 
 			// Center : Render the scene using a toon style pipeline
-			viewport.x = (float)width / 3.0f;
+			viewport.x = (float)width / 4.0f;
+			viewport.width = (float)width / 2.0f;
 			vkCmdSetViewport(drawCmdBuffers[i], 0, 1, &viewport);
 			vkCmdBindPipeline(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelines.toon);
 			// Line width > 1.0f only if wide lines feature is supported
-			if (enabledFeatures.wideLines) {
+			if (enabledFeatures.wideLines)
+			{
 				vkCmdSetLineWidth(drawCmdBuffers[i], 2.0f);
 			}
 			scene.draw(drawCmdBuffers[i]);
 
 			// Right : Render the scene as wireframe (if that feature is supported by the implementation)
-			if (enabledFeatures.fillModeNonSolid) {
-				viewport.x = (float)width / 3.0f + (float)width / 3.0f;
+			if (enabledFeatures.fillModeNonSolid)
+			{
+				viewport.width = (float)width / 4.0f;
+				viewport.x = (float)width * 3.0f / 4.0f;
 				vkCmdSetViewport(drawCmdBuffers[i], 0, 1, &viewport);
 				vkCmdBindPipeline(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelines.wireframe);
 				scene.draw(drawCmdBuffers[i]);
@@ -151,16 +150,14 @@ public:
 	{
 		// Pool
 		std::vector<VkDescriptorPoolSize> poolSizes = {
-			vks::initializers::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1)
-		};
+			vks::initializers::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1)};
 		VkDescriptorPoolCreateInfo descriptorPoolInfo = vks::initializers::descriptorPoolCreateInfo(poolSizes, 2);
 		VK_CHECK_RESULT(vkCreateDescriptorPool(device, &descriptorPoolInfo, nullptr, &descriptorPool));
 
 		// Layout
 		std::vector<VkDescriptorSetLayoutBinding> setLayoutBindings = {
 			// Binding 0 : Vertex shader uniform buffer
-			vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0)
-		};
+			vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0)};
 		VkDescriptorSetLayoutCreateInfo descriptorLayout = vks::initializers::descriptorSetLayoutCreateInfo(setLayoutBindings);
 		VK_CHECK_RESULT(vkCreateDescriptorSetLayout(device, &descriptorLayout, nullptr, &descriptorSetLayout));
 
@@ -170,8 +167,7 @@ public:
 
 		std::vector<VkWriteDescriptorSet> writeDescriptorSets = {
 			// Binding 0 : Vertex shader uniform buffer
-			vks::initializers::writeDescriptorSet(descriptorSet, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 0, &uniformBuffer.descriptor)
-		};
+			vks::initializers::writeDescriptorSet(descriptorSet, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 0, &uniformBuffer.descriptor)};
 		vkUpdateDescriptorSets(device, static_cast<uint32_t>(writeDescriptorSets.size()), writeDescriptorSets.data(), 0, nullptr);
 	}
 
@@ -182,7 +178,7 @@ public:
 		VK_CHECK_RESULT(vkCreatePipelineLayout(device, &pipelineLayoutCreateInfo, nullptr, &pipelineLayout));
 
 		// Pipelines
-		
+
 		// Most state is shared between all pipelines
 		VkPipelineInputAssemblyStateCreateInfo inputAssemblyState = vks::initializers::pipelineInputAssemblyStateCreateInfo(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, 0, VK_FALSE);
 		VkPipelineRasterizationStateCreateInfo rasterizationState = vks::initializers::pipelineRasterizationStateCreateInfo(VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE, 0);
@@ -191,7 +187,11 @@ public:
 		VkPipelineDepthStencilStateCreateInfo depthStencilState = vks::initializers::pipelineDepthStencilStateCreateInfo(VK_TRUE, VK_TRUE, VK_COMPARE_OP_LESS_OR_EQUAL);
 		VkPipelineViewportStateCreateInfo viewportState = vks::initializers::pipelineViewportStateCreateInfo(1, 1, 0);
 		VkPipelineMultisampleStateCreateInfo multisampleState = vks::initializers::pipelineMultisampleStateCreateInfo(VK_SAMPLE_COUNT_1_BIT);
-		std::vector<VkDynamicState> dynamicStateEnables = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR, VK_DYNAMIC_STATE_LINE_WIDTH, };
+		std::vector<VkDynamicState> dynamicStateEnables = {
+			VK_DYNAMIC_STATE_VIEWPORT,
+			VK_DYNAMIC_STATE_SCISSOR,
+			VK_DYNAMIC_STATE_LINE_WIDTH,
+		};
 		VkPipelineDynamicStateCreateInfo dynamicState = vks::initializers::pipelineDynamicStateCreateInfo(dynamicStateEnables);
 		std::array<VkPipelineShaderStageCreateInfo, 2> shaderStages;
 
@@ -205,7 +205,7 @@ public:
 		pipelineCI.pDynamicState = &dynamicState;
 		pipelineCI.stageCount = static_cast<uint32_t>(shaderStages.size());
 		pipelineCI.pStages = shaderStages.data();
-		pipelineCI.pVertexInputState  = vkglTF::Vertex::getPipelineVertexInputState({vkglTF::VertexComponent::Position, vkglTF::VertexComponent::Normal, vkglTF::VertexComponent::Color});
+		pipelineCI.pVertexInputState = vkglTF::Vertex::getPipelineVertexInputState({vkglTF::VertexComponent::Position, vkglTF::VertexComponent::Normal, vkglTF::VertexComponent::Color});
 
 		// Create the different pipelines used in this sample
 
@@ -236,7 +236,8 @@ public:
 
 		// Pipeline for wire frame rendering
 		// Non solid rendering is not a mandatory Vulkan feature
-		if (enabledFeatures.fillModeNonSolid) {
+		if (enabledFeatures.fillModeNonSolid)
+		{
 			rasterizationState.polygonMode = VK_POLYGON_MODE_LINE;
 			shaderStages[0] = loadShader(getShadersPath() + "pipelines/wireframe.vert.spv", VK_SHADER_STAGE_VERTEX_BIT);
 			shaderStages[1] = loadShader(getShadersPath() + "pipelines/wireframe.frag.spv", VK_SHADER_STAGE_FRAGMENT_BIT);
@@ -292,8 +293,10 @@ public:
 
 	virtual void OnUpdateUIOverlay(vks::UIOverlay *overlay)
 	{
-		if (!enabledFeatures.fillModeNonSolid) {
-			if (overlay->header("Info")) {
+		if (!enabledFeatures.fillModeNonSolid)
+		{
+			if (overlay->header("Info"))
+			{
 				overlay->text("Non solid fill modes not supported!");
 			}
 		}

@@ -133,7 +133,7 @@ set(EXAMPLES
 	#pbrbasic
 	#pbribl
 	#pbrtexture
-	#pipelines
+	pipelines
 	#pipelinestatistics
 	#pushconstants
 	#pushdescriptors
@@ -169,7 +169,7 @@ set(EXAMPLES
 	#texturecubemaparray
 	#texturemipmapgen
 	#texturesparseresidency
-	triangle
+	#triangle
 	#variablerateshading
 	#vertexattributes
 	#viewportarray
