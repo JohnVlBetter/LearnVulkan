@@ -106,7 +106,7 @@ set(EXAMPLES
 	#distancefieldfonts
 	#dynamicrendering
 	#dynamicstate
-	#dynamicuniformbuffer	
+	dynamicuniformbuffer	
 	#gears
 	#geometryshader
 	#gltfloading
@@ -133,7 +133,7 @@ set(EXAMPLES
 	#pbrbasic
 	#pbribl
 	#pbrtexture
-	pipelines
+	#pipelines
 	#pipelinestatistics
 	#pushconstants
 	#pushdescriptors

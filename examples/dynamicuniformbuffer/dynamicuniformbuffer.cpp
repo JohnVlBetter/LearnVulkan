@@ -1,53 +1,26 @@
-/*
-* Vulkan Example - Dynamic uniform buffers
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*
-* Summary:
-* Demonstrates the use of dynamic uniform buffers.
-*
-* Instead of using one uniform buffer per-object, this example allocates one big uniform buffer
-* with respect to the alignment reported by the device via minUniformBufferOffsetAlignment that
-* contains all matrices for the objects in the scene.
-*
-* The used descriptor type VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC then allows to set a dynamic
-* offset used to pass data from the single uniform buffer to the connected shader binding point.
-*/
-
 #include "vulkanexamplebase.h"
 
 #define OBJECT_INSTANCES 125
 
 // Vertex layout for this example
-struct Vertex {
+struct Vertex
+{
 	float pos[3];
 	float color[3];
 };
 
 // Wrapper functions for aligned memory allocation
 // There is currently no standard for this in C++ that works across all platforms and vendors, so we abstract this
-void* alignedAlloc(size_t size, size_t alignment)
+void *alignedAlloc(size_t size, size_t alignment)
 {
 	void *data = nullptr;
-#if defined(_MSC_VER) || defined(__MINGW32__)
 	data = _aligned_malloc(size, alignment);
-#else
-	int res = posix_memalign(&data, alignment, size);
-	if (res != 0)
-		data = nullptr;
-#endif
 	return data;
 }
 
-void alignedFree(void* data)
+void alignedFree(void *data)
 {
-#if	defined(_MSC_VER) || defined(__MINGW32__)
 	_aligned_free(data);
-#else
-	free(data);
-#endif
 }
 
 class VulkanExample : public VulkanExampleBase
@@ -55,14 +28,16 @@ class VulkanExample : public VulkanExampleBase
 public:
 	vks::Buffer vertexBuffer;
 	vks::Buffer indexBuffer;
-	uint32_t indexCount{ 0 };
+	uint32_t indexCount{0};
 
-	struct {
+	struct
+	{
 		vks::Buffer view;
 		vks::Buffer dynamic;
 	} uniformBuffers;
 
-	struct {
+	struct
+	{
 		glm::mat4 projection;
 		glm::mat4 view;
 	} uboVS;
@@ -73,18 +48,19 @@ public:
 
 	// One big uniform buffer that contains all matrices
 	// Note that we need to manually allocate the data to cope for GPU-specific uniform buffer offset alignments
-	struct UboDataDynamic {
-		glm::mat4* model{ nullptr };
+	struct UboDataDynamic
+	{
+		glm::mat4 *model{nullptr};
 	} uboDataDynamic;
 
-	VkPipeline pipeline{ VK_NULL_HANDLE };
-	VkPipelineLayout pipelineLayout{ VK_NULL_HANDLE };
-	VkDescriptorSet descriptorSet{ VK_NULL_HANDLE };
-	VkDescriptorSetLayout descriptorSetLayout{ VK_NULL_HANDLE };
+	VkPipeline pipeline{VK_NULL_HANDLE};
+	VkPipelineLayout pipelineLayout{VK_NULL_HANDLE};
+	VkDescriptorSet descriptorSet{VK_NULL_HANDLE};
+	VkDescriptorSetLayout descriptorSetLayout{VK_NULL_HANDLE};
 
-	float animationTimer{ 0.0f };
+	float animationTimer{0.0f};
 
-	size_t dynamicAlignment{ 0 };
+	size_t dynamicAlignment{0};
 
 	VulkanExample() : VulkanExampleBase()
 	{
@@ -97,8 +73,10 @@ public:
 
 	~VulkanExample()
 	{
-		if (device) {
-			if (uboDataDynamic.model) {
+		if (device)
+		{
+			if (uboDataDynamic.model)
+			{
 				alignedFree(uboDataDynamic.model);
 			}
 			vkDestroyPipeline(device, pipeline, nullptr);
@@ -117,7 +95,7 @@ public:
 
 		VkClearValue clearValues[2];
 		clearValues[0].color = defaultClearColor;
-		clearValues[1].depthStencil = { 1.0f, 0 };
+		clearValues[1].depthStencil = {1.0f, 0};
 
 		VkRenderPassBeginInfo renderPassBeginInfo = vks::initializers::renderPassBeginInfo();
 		renderPassBeginInfo.renderPass = renderPass;
@@ -144,7 +122,7 @@ public:
 
 			vkCmdBindPipeline(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 
-			VkDeviceSize offsets[1] = { 0 };
+			VkDeviceSize offsets[1] = {0};
 			vkCmdBindVertexBuffers(drawCmdBuffers[i], 0, 1, &vertexBuffer.buffer, offsets);
 			vkCmdBindIndexBuffer(drawCmdBuffers[i], indexBuffer.buffer, 0, VK_INDEX_TYPE_UINT32);
 
@@ -171,18 +149,53 @@ public:
 	{
 		// Setup vertices indices for a colored cube
 		std::vector<Vertex> vertices = {
-			{ { -1.0f, -1.0f,  1.0f },{ 1.0f, 0.0f, 0.0f } },
-			{ {  1.0f, -1.0f,  1.0f },{ 0.0f, 1.0f, 0.0f } },
-			{ {  1.0f,  1.0f,  1.0f },{ 0.0f, 0.0f, 1.0f } },
-			{ { -1.0f,  1.0f,  1.0f },{ 0.0f, 0.0f, 0.0f } },
-			{ { -1.0f, -1.0f, -1.0f },{ 1.0f, 0.0f, 0.0f } },
-			{ {  1.0f, -1.0f, -1.0f },{ 0.0f, 1.0f, 0.0f } },
-			{ {  1.0f,  1.0f, -1.0f },{ 0.0f, 0.0f, 1.0f } },
-			{ { -1.0f,  1.0f, -1.0f },{ 0.0f, 0.0f, 0.0f } },
+			{{-1.0f, -1.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
+			{{1.0f, -1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
+			{{1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+			{{-1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}},
+			{{-1.0f, -1.0f, -1.0f}, {1.0f, 0.0f, 0.0f}},
+			{{1.0f, -1.0f, -1.0f}, {0.0f, 1.0f, 0.0f}},
+			{{1.0f, 1.0f, -1.0f}, {0.0f, 0.0f, 1.0f}},
+			{{-1.0f, 1.0f, -1.0f}, {0.0f, 0.0f, 0.0f}},
 		};
 
 		std::vector<uint32_t> indices = {
-			0,1,2, 2,3,0, 1,5,6, 6,2,1, 7,6,5, 5,4,7, 4,0,3, 3,7,4, 4,5,1, 1,0,4, 3,2,6, 6,7,3,
+			0,
+			1,
+			2,
+			2,
+			3,
+			0,
+			1,
+			5,
+			6,
+			6,
+			2,
+			1,
+			7,
+			6,
+			5,
+			5,
+			4,
+			7,
+			4,
+			0,
+			3,
+			3,
+			7,
+			4,
+			4,
+			5,
+			1,
+			1,
+			0,
+			4,
+			3,
+			2,
+			6,
+			6,
+			7,
+			3,
 		};
 
 		indexCount = static_cast<uint32_t>(indices.size());
@@ -210,8 +223,7 @@ public:
 		std::vector<VkDescriptorPoolSize> poolSizes = {
 			vks::initializers::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1),
 			// Dynamic uniform buffer
-			vks::initializers::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1)
-		};
+			vks::initializers::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1)};
 
 		VkDescriptorPoolCreateInfo descriptorPoolInfo = vks::initializers::descriptorPoolCreateInfo(poolSizes, 2);
 		VK_CHECK_RESULT(vkCreateDescriptorPool(device, &descriptorPoolInfo, nullptr, &descriptorPool));
@@ -220,8 +232,7 @@ public:
 		std::vector<VkDescriptorSetLayoutBinding> setLayoutBindings = {
 			vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0),
 			// Dynamic uniform buffer
-			vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, VK_SHADER_STAGE_VERTEX_BIT, 1)
-		};
+			vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, VK_SHADER_STAGE_VERTEX_BIT, 1)};
 
 		VkDescriptorSetLayoutCreateInfo descriptorLayout = vks::initializers::descriptorSetLayoutCreateInfo(setLayoutBindings);
 		VK_CHECK_RESULT(vkCreateDescriptorSetLayout(device, &descriptorLayout, nullptr, &descriptorSetLayout));
@@ -246,24 +257,23 @@ public:
 		VK_CHECK_RESULT(vkCreatePipelineLayout(device, &pipelineLayoutCreateInfo, nullptr, &pipelineLayout));
 
 		// Pipeline
-		VkPipelineInputAssemblyStateCreateInfo inputAssemblyState = vks::initializers::pipelineInputAssemblyStateCreateInfo(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, 0,  VK_FALSE);
+		VkPipelineInputAssemblyStateCreateInfo inputAssemblyState = vks::initializers::pipelineInputAssemblyStateCreateInfo(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, 0, VK_FALSE);
 		VkPipelineRasterizationStateCreateInfo rasterizationState = vks::initializers::pipelineRasterizationStateCreateInfo(VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE, 0);
 		VkPipelineColorBlendAttachmentState blendAttachmentState = vks::initializers::pipelineColorBlendAttachmentState(0xf, VK_FALSE);
 		VkPipelineColorBlendStateCreateInfo colorBlendState = vks::initializers::pipelineColorBlendStateCreateInfo(1, &blendAttachmentState);
 		VkPipelineDepthStencilStateCreateInfo depthStencilState = vks::initializers::pipelineDepthStencilStateCreateInfo(VK_TRUE, VK_TRUE, VK_COMPARE_OP_LESS_OR_EQUAL);
 		VkPipelineViewportStateCreateInfo viewportState = vks::initializers::pipelineViewportStateCreateInfo(1, 1, 0);
 		VkPipelineMultisampleStateCreateInfo multisampleState = vks::initializers::pipelineMultisampleStateCreateInfo(VK_SAMPLE_COUNT_1_BIT, 0);
-		std::vector<VkDynamicState> dynamicStateEnables = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
+		std::vector<VkDynamicState> dynamicStateEnables = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
 		VkPipelineDynamicStateCreateInfo dynamicState = vks::initializers::pipelineDynamicStateCreateInfo(dynamicStateEnables);
 		std::array<VkPipelineShaderStageCreateInfo, 2> shaderStages;
 
 		// Vertex bindings and attributes
-		VkVertexInputBindingDescription vertexInputBinding = { 
-			vks::initializers::vertexInputBindingDescription(0, sizeof(Vertex), VK_VERTEX_INPUT_RATE_VERTEX)
-		};
+		VkVertexInputBindingDescription vertexInputBinding = {
+			vks::initializers::vertexInputBindingDescription(0, sizeof(Vertex), VK_VERTEX_INPUT_RATE_VERTEX)};
 		std::vector<VkVertexInputAttributeDescription> vertexInputAttributes = {
-			vks::initializers::vertexInputAttributeDescription(0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, pos)),	// Location 0 : Position
-			vks::initializers::vertexInputAttributeDescription(0, 1, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color)),	// Location 1 : Color
+			vks::initializers::vertexInputAttributeDescription(0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, pos)),   // Location 0 : Position
+			vks::initializers::vertexInputAttributeDescription(0, 1, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color)), // Location 1 : Color
 		};
 		VkPipelineVertexInputStateCreateInfo vertexInputStateCI = vks::initializers::pipelineVertexInputStateCreateInfo();
 		vertexInputStateCI.vertexBindingDescriptionCount = 1;
@@ -297,13 +307,14 @@ public:
 		// Calculate required alignment based on minimum device offset alignment
 		size_t minUboAlignment = vulkanDevice->properties.limits.minUniformBufferOffsetAlignment;
 		dynamicAlignment = sizeof(glm::mat4);
-		if (minUboAlignment > 0) {
+		if (minUboAlignment > 0)
+		{
 			dynamicAlignment = (dynamicAlignment + minUboAlignment - 1) & ~(minUboAlignment - 1);
 		}
 
 		size_t bufferSize = OBJECT_INSTANCES * dynamicAlignment;
 
-		uboDataDynamic.model = (glm::mat4*)alignedAlloc(bufferSize, dynamicAlignment);
+		uboDataDynamic.model = (glm::mat4 *)alignedAlloc(bufferSize, dynamicAlignment);
 		assert(uboDataDynamic.model);
 
 		std::cout << "minUniformBufferOffsetAlignment = " << minUboAlignment << std::endl;
@@ -335,7 +346,8 @@ public:
 		// Prepare per-object matrices with offsets and random rotations
 		std::default_random_engine rndEngine(benchmark.active ? 0 : (unsigned)time(nullptr));
 		std::normal_distribution<float> rndDist(-1.0f, 1.0f);
-		for (uint32_t i = 0; i < OBJECT_INSTANCES; i++) {
+		for (uint32_t i = 0; i < OBJECT_INSTANCES; i++)
+		{
 			rotations[i] = glm::vec3(rndDist(rndEngine), rndDist(rndEngine), rndDist(rndEngine)) * 2.0f * (float)M_PI;
 			rotationSpeeds[i] = glm::vec3(rndDist(rndEngine), rndDist(rndEngine), rndDist(rndEngine));
 		}
@@ -356,8 +368,9 @@ public:
 	void updateDynamicUniformBuffer()
 	{
 		// Update at max. 60 fps
-		animationTimer += frameTimer;	
-		if (animationTimer <= 1.0f / 60.0f) {
+		animationTimer += frameTimer;
+		if (animationTimer <= 1.0f / 60.0f)
+		{
 			return;
 		}
 
@@ -374,7 +387,7 @@ public:
 					uint32_t index = x * dim * dim + y * dim + z;
 
 					// Aligned offset
-					glm::mat4* modelMat = (glm::mat4*)(((uint64_t)uboDataDynamic.model + (index * dynamicAlignment)));
+					glm::mat4 *modelMat = (glm::mat4 *)(((uint64_t)uboDataDynamic.model + (index * dynamicAlignment)));
 
 					// Update rotations
 					rotations[index] += animationTimer * rotationSpeeds[index];
