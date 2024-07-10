@@ -67,5 +67,10 @@ void main()
 			outFragColor = vec4(ambient + diffuse + vec3(specular), 1.0);		
 			break;
 		}
+		case 3: // Unlit
+		{
+			outFragColor = vec4(inColor, 1.0);		
+			break;
+		}
 	}
 }

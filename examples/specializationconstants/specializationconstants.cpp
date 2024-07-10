@@ -1,18 +1,3 @@
-/*
-* Vulkan Example - Shader specialization constants
-* 
-* This samples uses specialization constants to define shader constants at pipeline creation
-* These are used to compile shaders with different execution paths and settings 
-* With these constants one can create different shader configurations from a single shader file
-* See uber.frag for how such a shader can look
-*
-* For details see https://www.khronos.org/registry/vulkan/specs/misc/GL_KHR_vulkan_glsl.txt
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
@@ -36,6 +21,7 @@ public:
 	struct Pipelines{
 		VkPipeline phong{ VK_NULL_HANDLE };
 		VkPipeline toon{ VK_NULL_HANDLE };
+		VkPipeline unlit{ VK_NULL_HANDLE };
 		VkPipeline textured{ VK_NULL_HANDLE };
 	} pipelines;
 
@@ -46,11 +32,6 @@ public:
 		camera.setPerspective(60.0f, ((float)width / 3.0f) / (float)height, 0.1f, 512.0f);
 		camera.setRotation(glm::vec3(-40.0f, -90.0f, 0.0f));
 		camera.setTranslation(glm::vec3(0.0f, 0.0f, -2.0f));
-		
-#if (defined(VK_USE_PLATFORM_MACOS_MVK) || defined(VK_USE_PLATFORM_METAL_EXT))
-		// SRS - on macOS set environment variable to ensure MoltenVK disables Metal argument buffers for this example
-		setenv("MVK_CONFIG_USE_METAL_ARGUMENT_BUFFERS", "0", 1);
-#endif
 	}
 
 	~VulkanExample()
@@ -58,6 +39,7 @@ public:
 		if (device) {
 			vkDestroyPipeline(device, pipelines.phong, nullptr);
 			vkDestroyPipeline(device, pipelines.textured, nullptr);
+			vkDestroyPipeline(device, pipelines.unlit, nullptr);
 			vkDestroyPipeline(device, pipelines.toon, nullptr);
 			vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
 			vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
@@ -98,21 +80,27 @@ public:
 			vkCmdBindDescriptorSets(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSet, 0, NULL);
 
 			// Left
-			VkViewport viewport = vks::initializers::viewport((float) width / 3.0f, (float) height, 0.0f, 1.0f);
+			VkViewport viewport = vks::initializers::viewport((float) width / 4.0f, (float) height, 0.0f, 1.0f);
 			vkCmdSetViewport(drawCmdBuffers[i], 0, 1, &viewport);
 			vkCmdBindPipeline(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelines.phong);
 			scene.draw(drawCmdBuffers[i]);
 			
-			// Center
-			viewport.x = (float)width / 3.0f;
+			// Center Left
+			viewport.x = (float)width / 4.0f;
 			vkCmdSetViewport(drawCmdBuffers[i], 0, 1, &viewport);
 			vkCmdBindPipeline(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelines.toon);
 			scene.draw(drawCmdBuffers[i]);
 
-			// Right
-			viewport.x = (float)width / 3.0f + (float)width / 3.0f;
+			// Center Right
+			viewport.x = (float)width / 4.0f + (float)width / 4.0f;
 			vkCmdSetViewport(drawCmdBuffers[i], 0, 1, &viewport);
 			vkCmdBindPipeline(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelines.textured);
+			scene.draw(drawCmdBuffers[i]);
+
+			// Right
+			viewport.x = (float)width / 4.0f + (float)width / 2.0f;
+			vkCmdSetViewport(drawCmdBuffers[i], 0, 1, &viewport);
+			vkCmdBindPipeline(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelines.unlit);
 			scene.draw(drawCmdBuffers[i]);
 
 			drawUI(drawCmdBuffers[i]);
@@ -238,6 +226,10 @@ public:
 		// Textured discard
 		specializationData.lightingModel = 2;
 		VK_CHECK_RESULT(vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineCI, nullptr, &pipelines.textured));
+
+		// unlit shading
+		specializationData.lightingModel = 3;
+		VK_CHECK_RESULT(vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineCI, nullptr, &pipelines.unlit));
 	}
 
 	// Prepare and initialize uniform buffer containing shader uniforms

@@ -106,7 +106,7 @@ set(EXAMPLES
 	#distancefieldfonts
 	#dynamicrendering
 	#dynamicstate
-	dynamicuniformbuffer	
+	#dynamicuniformbuffer	
 	#gears
 	#geometryshader
 	#gltfloading
@@ -154,7 +154,7 @@ set(EXAMPLES
 	#shadowmapping
 	#shadowmappingomni
 	#shadowmappingcascade
-	#specializationconstants
+	specializationconstants
 	#sphericalenvmapping
 	#ssao
 	#stencilbuffer
