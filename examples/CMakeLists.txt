@@ -154,7 +154,7 @@ set(EXAMPLES
 	#shadowmapping
 	#shadowmappingomni
 	#shadowmappingcascade
-	specializationconstants
+	#specializationconstants
 	#sphericalenvmapping
 	#ssao
 	#stencilbuffer
@@ -164,7 +164,7 @@ set(EXAMPLES
 	#textoverlay
 	#texture
 	#texture3d
-	#texturearray
+	texturearray
 	#texturecubemap
 	#texturecubemaparray
 	#texturemipmapgen

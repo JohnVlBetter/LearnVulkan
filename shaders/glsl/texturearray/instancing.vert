@@ -16,11 +16,13 @@ layout (binding = 0) uniform UBO
 	Instance instance[8];
 } ubo;
 
-layout (location = 0) out vec3 outUV;
+layout (location = 0) out vec2 outUV;
+layout (location = 1) out float outIdx;
 
 void main() 
 {
-	outUV = vec3(inUV, ubo.instance[gl_InstanceIndex].arrayIndex);
+	outUV = inUV;
+	outIdx = ubo.instance[gl_InstanceIndex].arrayIndex;
 	mat4 modelView = ubo.view * ubo.instance[gl_InstanceIndex].model;
 	gl_Position = ubo.projection * modelView * vec4(inPos, 1.0);
 }
