@@ -164,8 +164,8 @@ set(EXAMPLES
 	#textoverlay
 	#texture
 	#texture3d
-	texturearray
-	#texturecubemap
+	#texturearray
+	texturecubemap
 	#texturecubemaparray
 	#texturemipmapgen
 	#texturesparseresidency

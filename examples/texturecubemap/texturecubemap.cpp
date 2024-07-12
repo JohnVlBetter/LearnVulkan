@@ -1,14 +1,3 @@
-/*
-* Vulkan Example - Cube map texture loading and displaying
-*
-* This sample shows how to load and render a cubemap. A cubemap is a textures that contains 6 images, one per cube face.
-* The sample displays the cubemap as a skybox (background) and as a reflection on a selectable object
-* 
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 #include <ktx.h>
@@ -86,27 +75,10 @@ public:
 		ktxResult result;
 		ktxTexture* ktxTexture;
 
-#if defined(__ANDROID__)
-		// Textures are stored inside the apk on Android (compressed)
-		// So they need to be loaded via the asset manager
-		AAsset* asset = AAssetManager_open(androidApp->activity->assetManager, filename.c_str(), AASSET_MODE_STREAMING);
-		if (!asset) {
-			vks::tools::exitFatal("Could not load texture from " + filename + "\n\nMake sure the assets submodule has been checked out and is up-to-date.", -1);
-		}
-		size_t size = AAsset_getLength(asset);
-		assert(size > 0);
-
-		ktx_uint8_t *textureData = new ktx_uint8_t[size];
-		AAsset_read(asset, textureData, size);
-		AAsset_close(asset);
-		result = ktxTexture_CreateFromMemory(textureData, size, KTX_TEXTURE_CREATE_LOAD_IMAGE_DATA_BIT, &ktxTexture);
-		delete[] textureData;
-#else
 		if (!vks::tools::fileExists(filename)) {
 			vks::tools::exitFatal("Could not load texture from " + filename + "\n\nMake sure the assets submodule has been checked out and is up-to-date.", -1);
 		}
 		result = ktxTexture_CreateFromNamedFile(filename.c_str(), KTX_TEXTURE_CREATE_LOAD_IMAGE_DATA_BIT, &ktxTexture);
-#endif
 		assert(result == KTX_SUCCESS);
 
 		// Get properties required for using and upload texture data from the ktx texture object
@@ -333,14 +305,14 @@ public:
 		// Skybox
 		models.skybox.loadFromFile(getAssetPath() + "models/cube.gltf", vulkanDevice, queue, glTFLoadingFlags);
 		// Objects
-		std::vector<std::string> filenames = { "sphere.gltf", "teapot.gltf", "torusknot.gltf", "venus.gltf" };
-		objectNames = { "Sphere", "Teapot", "Torusknot", "Venus" };
+		std::vector<std::string> filenames = { "sphere.gltf", "teapot.gltf", "plants.gltf", "venus.gltf" };
+		objectNames = { "Sphere", "Teapot", "Plants", "Venus" };
 		models.objects.resize(filenames.size());
 		for (size_t i = 0; i < filenames.size(); i++) {
 			models.objects[i].loadFromFile(getAssetPath() + "models/" + filenames[i], vulkanDevice, queue, glTFLoadingFlags);
 		}
 		// Cubemap texture
-		loadCubemap(getAssetPath() + "textures/cubemap_yokohama_rgba.ktx", VK_FORMAT_R8G8B8A8_UNORM);
+		loadCubemap(getAssetPath() + "textures/cubemap_vulkan.ktx", VK_FORMAT_R8G8B8A8_UNORM);
 	}
 
 	void setupDescriptors()
@@ -472,7 +444,7 @@ public:
 	virtual void OnUpdateUIOverlay(vks::UIOverlay *overlay)
 	{
 		if (overlay->header("Settings")) {
-			if (overlay->sliderFloat("LOD bias", &uboVS.lodBias, 0.0f, (float)cubeMap.mipLevels)) {
+			if (overlay->sliderFloat("LOD bias", &uboVS.lodBias, 0.0f, 1.0f/*(float)1.0*/)) {
 				updateUniformBuffers();
 			}
 			if (overlay->comboBox("Object type", &models.objectIndex, objectNames)) {

@@ -20,7 +20,7 @@ layout (location = 0) out vec4 outFragColor;
 void main()
 {
 	vec3 cI = normalize (inPos);
-	vec3 cR = reflect (cI, normalize(inNormal));
+	vec3 cR = refract (cI, normalize(inNormal), ubo.lodBias);
 
 	cR = vec3(ubo.invModel * vec4(cR, 0.0));
 	// Convert cubemap coordinates into Vulkan coordinate space
