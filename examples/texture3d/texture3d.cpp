@@ -1,11 +1,3 @@
-/*
-* Vulkan Example - 3D texture loading (and generation using perlin noise) example
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 
 // Vertex layout for this example
@@ -601,7 +593,7 @@ public:
 		uniformData.viewPos = camera.viewPos;
 		if (!paused) {
 			// Animate depth
-			uniformData.depth += frameTimer * 0.15f;
+			uniformData.depth += frameTimer * 0.30f;
 			if (uniformData.depth > 1.0f) {
 				uniformData.depth = uniformData.depth - 1.0f;
 			}

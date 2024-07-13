@@ -163,9 +163,9 @@ set(EXAMPLES
 	#tessellation
 	#textoverlay
 	#texture
-	#texture3d
+	texture3d
 	#texturearray
-	texturecubemap
+	#texturecubemap
 	#texturecubemaparray
 	#texturemipmapgen
 	#texturesparseresidency
