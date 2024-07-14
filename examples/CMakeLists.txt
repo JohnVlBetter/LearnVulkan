@@ -118,7 +118,7 @@ set(EXAMPLES
 	#imgui
 	#indirectdraw
 	#inlineuniformblocks
-	inputattachments
+	#inputattachments
 	#instancing
 	#meshshader
 	#multisampling
@@ -158,7 +158,7 @@ set(EXAMPLES
 	#sphericalenvmapping
 	#ssao
 	#stencilbuffer
-	#subpasses
+	subpasses
 	#terraintessellation
 	#tessellation
 	#textoverlay
