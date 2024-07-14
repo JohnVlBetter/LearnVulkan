@@ -118,7 +118,7 @@ set(EXAMPLES
 	#imgui
 	#indirectdraw
 	#inlineuniformblocks
-	#inputattachments
+	inputattachments
 	#instancing
 	#meshshader
 	#multisampling
@@ -163,7 +163,7 @@ set(EXAMPLES
 	#tessellation
 	#textoverlay
 	#texture
-	texture3d
+	#texture3d
 	#texturearray
 	#texturecubemap
 	#texturecubemaparray
