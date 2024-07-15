@@ -129,7 +129,7 @@ set(EXAMPLES
 	offscreen
 	#oit
 	#parallaxmapping
-	#particlesystem
+	particlesystem
 	#pbrbasic
 	#pbribl
 	#pbrtexture
@@ -158,7 +158,7 @@ set(EXAMPLES
 	#sphericalenvmapping
 	#ssao
 	#stencilbuffer
-	subpasses
+	#subpasses
 	#terraintessellation
 	#tessellation
 	#textoverlay

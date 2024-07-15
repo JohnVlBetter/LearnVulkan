@@ -37,5 +37,6 @@ void main(void)
 		
 	float specular = pow(max(dot(view, reflectDir), 0.0), 4.0);
 	
-	outFragColor = vec4((rgb * atten + (diffuse * rgb + 0.5 * specular * specularColor.rgb)) * atten, 1.0);   
+	outFragColor = vec4((rgb * atten + (diffuse * rgb)) * atten, 1.0);
+	outFragColor = floor(outFragColor * 10) / 10;
 }

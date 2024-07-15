@@ -1,17 +1,7 @@
-/*
-* Vulkan Example - CPU based particle system
-* 
-* This sample renders a particle system that is updated on the host (by the CPU) and rendered by the GPU using a vertex buffer
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
-#define PARTICLE_COUNT 512
+#define PARTICLE_COUNT 4096
 
 #define FLAME_RADIUS 8.0f
 
@@ -20,7 +10,8 @@
 #define PARTICLE_TYPE_FLAME 0
 #define PARTICLE_TYPE_SMOKE 1
 
-struct Particle {
+struct Particle
+{
 	glm::vec4 pos;
 	glm::vec4 color;
 	float alpha;
@@ -34,14 +25,17 @@ struct Particle {
 class VulkanExample : public VulkanExampleBase
 {
 public:
-	struct {
-		struct {
+	struct
+	{
+		struct
+		{
 			vks::Texture2D smoke;
 			vks::Texture2D fire;
 			// Use a custom sampler to change sampler attributes required for rotating the uvs in the shader for alpha blended textures
 			VkSampler sampler;
 		} particles;
-		struct {
+		struct
+		{
 			vks::Texture2D colorMap;
 			vks::Texture2D normalMap;
 		} floor;
@@ -51,51 +45,57 @@ public:
 
 	// These parameters define the particle system behaviour
 	glm::vec3 emitterPos = glm::vec3(0.0f, -FLAME_RADIUS + 2.0f, 0.0f);
-	glm::vec3 minVel = glm::vec3(-3.0f, 0.5f, -3.0f);
-	glm::vec3 maxVel = glm::vec3(3.0f, 7.0f, 3.0f);
+	glm::vec3 minVel = glm::vec3(-4.0f, 5.0f, -3.0f);
+	glm::vec3 maxVel = glm::vec3(13.0f, 17.0f, 13.0f);
 
-	struct Particles {
-		VkBuffer buffer{ VK_NULL_HANDLE };
-		VkDeviceMemory memory{ VK_NULL_HANDLE };
+	struct Particles
+	{
+		VkBuffer buffer{VK_NULL_HANDLE};
+		VkDeviceMemory memory{VK_NULL_HANDLE};
 		// Store the mapped address of the particle data for reuse
 		void *mappedMemory;
 		// Size of the particle buffer in bytes
-		size_t size{ 0 };
+		size_t size{0};
 	} particles;
 
-	struct {
+	struct
+	{
 		vks::Buffer particles;
 		vks::Buffer environment;
 	} uniformBuffers;
 
-	struct UniformDataParticles {
+	struct UniformDataParticles
+	{
 		glm::mat4 projection;
 		glm::mat4 modelView;
-		// The viewport dimension is used by the particle system vertex shader 
+		// The viewport dimension is used by the particle system vertex shader
 		// to calculate the absolute point size based on the current viewport size
 		glm::vec2 viewportDim;
 		// This is the base point size for all particles
-		float pointSize{ 10.0f };
+		float pointSize{10.0f};
 	} uniformDataParticles;
 
-	struct UniformDataEnvironment {
+	struct UniformDataEnvironment
+	{
 		glm::mat4 projection;
 		glm::mat4 modelView;
 		glm::mat4 normal;
 		glm::vec4 lightPos = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 	} uniformDataEnvironment;
 
-	struct {
-		VkPipeline particles{ VK_NULL_HANDLE };
-		VkPipeline environment{ VK_NULL_HANDLE };
+	struct
+	{
+		VkPipeline particles{VK_NULL_HANDLE};
+		VkPipeline environment{VK_NULL_HANDLE};
 	} pipelines;
 
-	VkPipelineLayout pipelineLayout{ VK_NULL_HANDLE };
-	VkDescriptorSetLayout descriptorSetLayout{ VK_NULL_HANDLE };
+	VkPipelineLayout pipelineLayout{VK_NULL_HANDLE};
+	VkDescriptorSetLayout descriptorSetLayout{VK_NULL_HANDLE};
 
-	struct {
-		VkDescriptorSet particles{ VK_NULL_HANDLE };
-		VkDescriptorSet environment{ VK_NULL_HANDLE };
+	struct
+	{
+		VkDescriptorSet particles{VK_NULL_HANDLE};
+		VkDescriptorSet environment{VK_NULL_HANDLE};
 	} descriptorSets;
 
 	std::vector<Particle> particleBuffer{};
@@ -115,7 +115,8 @@ public:
 
 	~VulkanExample()
 	{
-		if (device) {
+		if (device)
+		{
 			textures.particles.smoke.destroy();
 			textures.particles.fire.destroy();
 			textures.floor.colorMap.destroy();
@@ -141,7 +142,8 @@ public:
 	virtual void getEnabledFeatures()
 	{
 		// Enable anisotropic filtering if supported
-		if (deviceFeatures.samplerAnisotropy) {
+		if (deviceFeatures.samplerAnisotropy)
+		{
 			enabledFeatures.samplerAnisotropy = VK_TRUE;
 		};
 	}
@@ -152,7 +154,7 @@ public:
 
 		VkClearValue clearValues[2];
 		clearValues[0].color = defaultClearColor;
-		clearValues[1].depthStencil = { 1.0f, 0 };
+		clearValues[1].depthStencil = {1.0f, 0};
 
 		VkRenderPassBeginInfo renderPassBeginInfo = vks::initializers::renderPassBeginInfo();
 		renderPassBeginInfo.renderPass = renderPass;
@@ -175,10 +177,10 @@ public:
 			VkViewport viewport = vks::initializers::viewport((float)width, (float)height, 0.0f, 1.0f);
 			vkCmdSetViewport(drawCmdBuffers[i], 0, 1, &viewport);
 
-			VkRect2D scissor = vks::initializers::rect2D(width, height, 0,0);
+			VkRect2D scissor = vks::initializers::rect2D(width, height, 0, 0);
 			vkCmdSetScissor(drawCmdBuffers[i], 0, 1, &scissor);
 
-			VkDeviceSize offsets[1] = { 0 };
+			VkDeviceSize offsets[1] = {0};
 
 			// Environment
 			vkCmdBindDescriptorSets(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets.environment, 0, nullptr);
@@ -209,8 +211,8 @@ public:
 	{
 		particle->vel = glm::vec4(0.0f, minVel.y + rnd(maxVel.y - minVel.y), 0.0f, 0.0f);
 		particle->alpha = rnd(0.75f);
-		particle->size = 1.0f + rnd(0.5f);
-		particle->color = glm::vec4(1.0f);
+		particle->size = 2.0f + rnd(1.5f);
+		particle->color = glm::vec4(rnd(1.0f), rnd(1.0f), rnd(1.0f), 1.0f);
 		particle->type = PARTICLE_TYPE_FLAME;
 		particle->rotation = rnd(2.0f * float(M_PI));
 		particle->rotationSpeed = rnd(2.0f) - rnd(2.0f);
@@ -234,14 +236,14 @@ public:
 		{
 		case PARTICLE_TYPE_FLAME:
 			// Flame particles have a chance of turning into smoke
-			if (rnd(1.0f) < 0.05f)
+			if (rnd(1.0f) < 0.1f)
 			{
 				particle->alpha = 0.0f;
 				particle->color = glm::vec4(0.25f + rnd(0.25f));
 				particle->pos.x *= 0.5f;
 				particle->pos.z *= 0.5f;
 				particle->vel = glm::vec4(rnd(1.0f) - rnd(1.0f), (minVel.y * 2) + rnd(maxVel.y - minVel.y), rnd(1.0f) - rnd(1.0f), 0.0f);
-				particle->size = 1.0f + rnd(0.5f);
+				particle->size = 4.0f + rnd(5.0f);
 				particle->rotationSpeed = rnd(1.0f) - rnd(1.0f);
 				particle->type = PARTICLE_TYPE_SMOKE;
 			}
@@ -261,7 +263,7 @@ public:
 	void prepareParticles()
 	{
 		particleBuffer.resize(PARTICLE_COUNT);
-		for (auto& particle : particleBuffer)
+		for (auto &particle : particleBuffer)
 		{
 			initParticle(&particle, emitterPos);
 			particle.alpha = 1.0f - (abs(particle.pos.y) / (FLAME_RADIUS * 2.0f));
@@ -285,30 +287,29 @@ public:
 	void updateParticles()
 	{
 		float particleTimer = frameTimer * 0.45f;
-		for (auto& particle : particleBuffer)
+		for (auto &particle : particleBuffer)
 		{
 			switch (particle.type)
 			{
 			case PARTICLE_TYPE_FLAME:
 				particle.pos.y -= particle.vel.y * particleTimer * 3.5f;
-				particle.alpha += particleTimer * 2.5f;
-				particle.size -= particleTimer * 0.5f;
+				particle.alpha += particleTimer;
+				particle.size += particleTimer * 0.5f;
 				break;
 			case PARTICLE_TYPE_SMOKE:
 				particle.pos -= particle.vel * frameTimer * 1.0f;
-				particle.alpha += particleTimer * 1.25f;
+				particle.alpha += particleTimer;
 				particle.size += particleTimer * 0.125f;
-				particle.color -= particleTimer * 0.05f;
 				break;
 			}
 			particle.rotation += particleTimer * particle.rotationSpeed;
 			// If a particle has faded out, turn it into the other type (e.g. flame to smoke and vice versa)
-			if (particle.alpha > 2.0f)
+			if (particle.alpha > 1.0f)
 			{
 				transitionParticle(&particle);
 			}
 		}
-		
+
 		// Copy the updated particles to the vertex buffer
 		size_t size = particleBuffer.size() * sizeof(Particle);
 		memcpy(particles.mappedMemory, particleBuffer.data(), size);
@@ -318,7 +319,7 @@ public:
 	{
 		// Particles
 		textures.particles.smoke.loadFromFile(getAssetPath() + "textures/particle_smoke.ktx", VK_FORMAT_R8G8B8A8_UNORM, vulkanDevice, queue);
-		textures.particles.fire.loadFromFile(getAssetPath() + "textures/particle_fire.ktx", VK_FORMAT_R8G8B8A8_UNORM, vulkanDevice, queue);
+		textures.particles.fire.loadFromFile(getAssetPath() + "textures/particle01_rgba.ktx", VK_FORMAT_R8G8B8A8_UNORM, vulkanDevice, queue);
 
 		// Floor
 		textures.floor.colorMap.loadFromFile(getAssetPath() + "textures/fireplace_colormap_rgba.ktx", VK_FORMAT_R8G8B8A8_UNORM, vulkanDevice, queue);
@@ -360,8 +361,7 @@ public:
 		// Pool
 		std::vector<VkDescriptorPoolSize> poolSizes = {
 			vks::initializers::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 2),
-			vks::initializers::descriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 4)
-		};
+			vks::initializers::descriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 4)};
 		VkDescriptorPoolCreateInfo descriptorPoolInfo = vks::initializers::descriptorPoolCreateInfo(poolSizes, 2);
 		VK_CHECK_RESULT(vkCreateDescriptorPool(device, &descriptorPoolInfo, nullptr, &descriptorPool));
 
@@ -371,12 +371,11 @@ public:
 			vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0),
 			// Binding 1 : Fragment shader image sampler
 			vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, 1),
-			// Binding 1 : Fragment shader image sampler
-			vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT,2)
-		};
+			// Binding 2 : Fragment shader image sampler
+			vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, 2)};
 		VkDescriptorSetLayoutCreateInfo descriptorLayout = vks::initializers::descriptorSetLayoutCreateInfo(setLayoutBindings);
 		VK_CHECK_RESULT(vkCreateDescriptorSetLayout(device, &descriptorLayout, nullptr, &descriptorSetLayout));
-		
+
 		// Sets
 		std::vector<VkWriteDescriptorSet> writeDescriptorSets;
 
@@ -394,8 +393,7 @@ public:
 			// Binding 1: Smoke texture
 			vks::initializers::writeDescriptorSet(descriptorSets.particles, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, &texDescriptorSmoke),
 			// Binding 1: Fire texture array
-			vks::initializers::writeDescriptorSet(descriptorSets.particles, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 2, &texDescriptorFire)
-		};
+			vks::initializers::writeDescriptorSet(descriptorSets.particles, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 2, &texDescriptorFire)};
 		vkUpdateDescriptorSets(device, static_cast<uint32_t>(writeDescriptorSets.size()), writeDescriptorSets.data(), 0, nullptr);
 
 		// Environment
@@ -447,8 +445,8 @@ public:
 				vks::initializers::vertexInputBindingDescription(0, sizeof(Particle), VK_VERTEX_INPUT_RATE_VERTEX);
 
 			std::vector<VkVertexInputAttributeDescription> vertexInputAttributes = {
-				vks::initializers::vertexInputAttributeDescription(0, 0, VK_FORMAT_R32G32B32A32_SFLOAT,	offsetof(Particle, pos)),	// Location 0: Position
-				vks::initializers::vertexInputAttributeDescription(0, 1, VK_FORMAT_R32G32B32A32_SFLOAT,	offsetof(Particle, color)),	// Location 1: Color
+				vks::initializers::vertexInputAttributeDescription(0, 0, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Particle, pos)),	// Location 0: Position
+				vks::initializers::vertexInputAttributeDescription(0, 1, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Particle, color)), // Location 1: Color
 				vks::initializers::vertexInputAttributeDescription(0, 2, VK_FORMAT_R32_SFLOAT, offsetof(Particle, alpha)),			// Location 2: Alpha
 				vks::initializers::vertexInputAttributeDescription(0, 3, VK_FORMAT_R32_SFLOAT, offsetof(Particle, size)),			// Location 3: Size
 				vks::initializers::vertexInputAttributeDescription(0, 4, VK_FORMAT_R32_SFLOAT, offsetof(Particle, rotation)),		// Location 4: Rotation
@@ -484,7 +482,7 @@ public:
 		// Environment rendering pipeline (normal mapped)
 		{
 			// Vertex input state is taken from the glTF model loader
-			pipelineCI.pVertexInputState = vkglTF::Vertex::getPipelineVertexInputState({ vkglTF::VertexComponent::Position, vkglTF::VertexComponent::UV, vkglTF::VertexComponent::Normal, vkglTF::VertexComponent::Tangent });
+			pipelineCI.pVertexInputState = vkglTF::Vertex::getPipelineVertexInputState({vkglTF::VertexComponent::Position, vkglTF::VertexComponent::UV, vkglTF::VertexComponent::Normal, vkglTF::VertexComponent::Tangent});
 
 			blendAttachmentState.blendEnable = VK_FALSE;
 			depthStencilState.depthWriteEnable = VK_TRUE;
@@ -521,7 +519,8 @@ public:
 		uniformDataEnvironment.modelView = camera.matrices.view;
 		uniformDataEnvironment.normal = glm::inverseTranspose(uniformDataEnvironment.modelView);
 		// Update light position
-		if (!paused) {
+		if (!paused)
+		{
 			uniformDataEnvironment.lightPos.x = sin(timer * 2.0f * float(M_PI)) * 1.5f;
 			uniformDataEnvironment.lightPos.y = 0.0f;
 			uniformDataEnvironment.lightPos.z = cos(timer * 2.0f * float(M_PI)) * 1.5f;
@@ -555,7 +554,8 @@ public:
 		if (!prepared)
 			return;
 		updateUniformBuffers();
-		if (!paused) {
+		if (!paused)
+		{
 			updateParticles();
 		}
 		draw();
