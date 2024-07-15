@@ -47,4 +47,8 @@ void main()
 	}    	
    
 	outColor = vec4(fragcolor, 1.0);
+	outColor = vec4(fragPos, 1.0);
+	outColor = vec4(albedo.rgb, 1.0);
+	outColor = vec4(normal, 1.0);
+	outColor = vec4(albedo.aaa, 1.0);
 }

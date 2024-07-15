@@ -1,21 +1,3 @@
-/*
- * Vulkan Example - Using subpasses for G-Buffer compositing
- *
- * Copyright (C) 2016-2024 by Sascha Willems - www.saschawillems.de
- *
- * This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
- *
- * Summary:
- * Implements a deferred rendering setup with a forward transparency pass using sub passes
- *
- * Sub passes allow reading from the previous framebuffer (in the same render pass) at
- * the same pixel position.
- *
- * This is a feature that was especially designed for tile-based-renderers
- * (mostly mobile GPUs) and is a new optimization feature in Vulkan for those GPU types.
- *
- */
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
@@ -92,9 +74,6 @@ public:
 		title = "Subpasses";
 		camera.type = Camera::CameraType::firstperson;
 		camera.movementSpeed = 5.0f;
-#ifndef __ANDROID__
-		camera.rotationSpeed = 0.25f;
-#endif
 		camera.setPosition(glm::vec3(-3.2f, 1.0f, 5.9f));
 		camera.setRotation(glm::vec3(0.5f, 210.05f, 0.0f));
 		camera.setPerspective(60.0f, (float)width / (float)height, 0.1f, 256.0f);
@@ -750,15 +729,6 @@ public:
 
 	void initLights()
 	{
-		std::vector<glm::vec3> colors =
-		{
-			glm::vec3(1.0f, 1.0f, 1.0f),
-			glm::vec3(1.0f, 0.0f, 0.0f),
-			glm::vec3(0.0f, 1.0f, 0.0f),
-			glm::vec3(0.0f, 0.0f, 1.0f),
-			glm::vec3(1.0f, 1.0f, 0.0f),
-		};
-
 		std::random_device rndDevice;
 		std::default_random_engine rndGen(benchmark.active ? 0 : rndDevice());
 		std::uniform_real_distribution<float> rndDist(-1.0f, 1.0f);
@@ -767,8 +737,7 @@ public:
 		for (auto& light : lights)
 		{
 			light.position = glm::vec4(rndDist(rndGen) * 8.0f, 0.25f + std::abs(rndDist(rndGen)) * 4.0f, rndDist(rndGen) * 8.0f, 1.0f);
-			//light.color = colors[rndCol(rndGen)];
-			light.color = glm::vec3(rndCol(rndGen), rndCol(rndGen), rndCol(rndGen)) * 2.0f;
+			light.color = glm::vec3(rndCol(rndGen), rndCol(rndGen), rndCol(rndGen)) * 4.0f;
 			light.radius = 1.0f + std::abs(rndDist(rndGen));
 		}
 
@@ -814,11 +783,6 @@ public:
 
 	virtual void OnUpdateUIOverlay(vks::UIOverlay *overlay)
 	{
-		if (overlay->header("Subpasses")) {
-			overlay->text("0: Deferred G-Buffer creation");
-			overlay->text("1: Deferred composition");
-			overlay->text("2: Forward transparency");
-		}
 		if (overlay->header("Settings")) {
 			if (overlay->button("Randomize lights")) {
 				initLights();

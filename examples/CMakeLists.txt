@@ -158,7 +158,7 @@ set(EXAMPLES
 	#sphericalenvmapping
 	#ssao
 	#stencilbuffer
-	#subpasses
+	subpasses
 	#terraintessellation
 	#tessellation
 	#textoverlay

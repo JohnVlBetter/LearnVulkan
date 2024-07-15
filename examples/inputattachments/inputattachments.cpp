@@ -1,15 +1,3 @@
-/*
- * Vulkan Example - Using input attachments
- *
- * Copyright (C) 2018-2024 by Sascha Willems - www.saschawillems.de
- *
- * This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
- *
- * Summary:
- * Input attachments can be used to read attachment contents from a previous sub pass
- * at the same pixel position within a single render pass
- */
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
@@ -412,7 +400,7 @@ public:
 	void loadAssets()
 	{
 		const uint32_t glTFLoadingFlags = vkglTF::FileLoadingFlags::PreTransformVertices | vkglTF::FileLoadingFlags::PreMultiplyVertexColors | vkglTF::FileLoadingFlags::FlipY;
-		scene.loadFromFile(getAssetPath() + "models/treasure_smooth.gltf", vulkanDevice, queue, glTFLoadingFlags);
+		scene.loadFromFile(getAssetPath() + "models/samplescene.gltf", vulkanDevice, queue, glTFLoadingFlags);
 	}
 
 	void updateAttachmentReadDescriptors(uint32_t index)
