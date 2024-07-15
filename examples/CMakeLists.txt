@@ -126,7 +126,7 @@ set(EXAMPLES
 	#multiview
 	#negativeviewportheight	
 	#occlusionquery
-	#offscreen
+	offscreen
 	#oit
 	#parallaxmapping
 	#particlesystem
@@ -163,7 +163,7 @@ set(EXAMPLES
 	#tessellation
 	#textoverlay
 	#texture
-	texture3d
+	#texture3d
 	#texturearray
 	#texturecubemap
 	#texturecubemaparray

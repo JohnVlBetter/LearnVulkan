@@ -1,11 +1,3 @@
-/*
-* Vulkan Example - Offscreen rendering using a separate framebuffer
-*
-* Copyright (C) 2016-2024 Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
@@ -74,8 +66,8 @@ public:
 		VkDescriptorImageInfo descriptor;
 	} offscreenPass{};
 
-	glm::vec3 modelPosition = glm::vec3(0.0f, -1.0f, 0.0f);
-	glm::vec3 modelRotation = glm::vec3(0.0f);
+	glm::vec3 modelPosition = glm::vec3(0.0f, -1.5f, 0.0f);
+	glm::vec3 modelRotation = glm::vec3(0.0f, 45.0f, 0.0f);
 
 	VulkanExample() : VulkanExampleBase()
 	{
@@ -398,7 +390,7 @@ public:
 	{
 		const uint32_t glTFLoadingFlags = vkglTF::FileLoadingFlags::PreTransformVertices | vkglTF::FileLoadingFlags::PreMultiplyVertexColors | vkglTF::FileLoadingFlags::FlipY;
 		models.plane.loadFromFile(getAssetPath() + "models/plane.gltf", vulkanDevice, queue, glTFLoadingFlags);
-		models.example.loadFromFile(getAssetPath() + "models/chinesedragon.gltf", vulkanDevice, queue, glTFLoadingFlags);
+		models.example.loadFromFile(getAssetPath() + "models/deer.gltf", vulkanDevice, queue, glTFLoadingFlags);
 	}
 
 	void setupDescriptors()

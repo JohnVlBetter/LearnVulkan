@@ -25,13 +25,14 @@ void main()
 	{
 		// Only render mirrored scene on front facing (upper) side of mirror surface
 		vec4 reflection = vec4(0.0);
-		for (int x = -3; x <= 3; x++)
+		/*for (int x = -3; x <= 3; x++)
 		{
 			for (int y = -3; y <= 3; y++)
 			{
 				reflection += texture(samplerColor, vec2(projCoord.s + x * blurSize, projCoord.t + y * blurSize)) / 49.0;
 			}
-		}
+		}*/
+		reflection = texture(samplerColor, vec2(projCoord.s, projCoord.t));
 		outFragColor += reflection;
 	};
 }
