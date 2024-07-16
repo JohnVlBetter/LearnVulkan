@@ -109,7 +109,7 @@ set(EXAMPLES
 	#dynamicuniformbuffer	
 	#gears
 	#geometryshader
-	#gltfloading
+	gltfloading
 	#gltfscenerendering
 	#gltfskinning
 	#graphicspipelinelibrary
@@ -126,10 +126,10 @@ set(EXAMPLES
 	#multiview
 	#negativeviewportheight	
 	#occlusionquery
-	offscreen
+	#offscreen
 	#oit
 	#parallaxmapping
-	particlesystem
+	#particlesystem
 	#pbrbasic
 	#pbribl
 	#pbrtexture

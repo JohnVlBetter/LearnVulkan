@@ -1,30 +1,7 @@
-/*
-* Vulkan Example - glTF scene loading and rendering
-*
-* Copyright (C) 2020-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
-/*
- * Shows how to load and display a simple scene from a glTF file
- * Note that this isn't a complete glTF loader and only basic functions are shown here
- * This means no complex materials, no animations, no skins, etc.
- * For details on how glTF 2.0 works, see the official spec at https://github.com/KhronosGroup/glTF/tree/master/specification/2.0
- *
- * Other samples will load models using a dedicated model loader with more features (see base/VulkanglTFModel.hpp)
- *
- * If you are looking for a complete glTF implementation, check out https://github.com/SaschaWillems/Vulkan-glTF-PBR/
- */
-
 #define TINYGLTF_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #define TINYGLTF_NO_STB_IMAGE_WRITE
-#ifdef VK_USE_PLATFORM_ANDROID_KHR
-#define TINYGLTF_ANDROID_LOAD_FROM_ASSETS
-#endif
 #include "tiny_gltf.h"
-
 #include "vulkanexamplebase.h"
 
 
@@ -484,11 +461,6 @@ public:
 
 		this->device = device;
 
-#if defined(__ANDROID__)
-		// On Android all assets are packed with the apk in a compressed form, so we need to open them using the asset manager
-		// We let tinygltf handle this, by passing the asset manager of our app
-		tinygltf::asset_manager = androidApp->activity->assetManager;
-#endif
 		bool fileLoaded = gltfContext.LoadASCIIFromFile(&glTFInput, &error, &warning, filename);
 
 		// Pass some Vulkan resources required for setup and rendering to the glTF model loading class
@@ -588,7 +560,7 @@ public:
 
 	void loadAssets()
 	{
-		loadglTFFile(getAssetPath() + "models/FlightHelmet/glTF/FlightHelmet.gltf");
+		loadglTFFile(getAssetPath() + "models/DamagedHelmet/glTF/DamagedHelmet.gltf");
 	}
 
 	void setupDescriptors()

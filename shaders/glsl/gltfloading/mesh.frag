@@ -16,9 +16,15 @@ void main()
 
 	vec3 N = normalize(inNormal);
 	vec3 L = normalize(inLightVec);
-	vec3 V = normalize(inViewVec);
-	vec3 R = reflect(L, N);
-	vec3 diffuse = max(dot(N, L), 0.15) * inColor;
-	vec3 specular = pow(max(dot(R, V), 0.0), 16.0) * vec3(0.75);
-	outFragColor = vec4(diffuse * color.rgb + specular, 1.0);		
+	float ndl = max(dot(N, L),0.0);
+	vec3 diffuse = inColor;
+	if(ndl < 0.2){
+		diffuse *= vec3(0.05,0.0,0.3);
+	}
+	else if(ndl < 0.5){
+		diffuse *= vec3(0.0,0.25,0.8);
+	}else{
+		diffuse *= vec3(0,0.85,0.85);
+	}
+	outFragColor = vec4(diffuse * color.rgb, 1.0);		
 }
