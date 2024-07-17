@@ -1,30 +1,4 @@
-/*
-* Vulkan Example - glTF skinned animation
-*
-* Copyright (C) 2020-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
-/*
- * Shows how to load and display an animated scene from a glTF file using vertex skinning
- * See the accompanying README.md for a short tutorial on the data structures and functions required for vertex skinning
- *
- * For details on how glTF 2.0 works, see the official spec at https://github.com/KhronosGroup/glTF/tree/master/specification/2.0
- *
- * If you are looking for a complete glTF implementation, check out https://github.com/SaschaWillems/Vulkan-glTF-PBR/
- */
-
 #include "gltfskinning.h"
-
-/*
-
-	 glTF model class
-
-	 Contains everything required to render a skinned glTF model in Vulkan
-	 This class is simplified compared to glTF's feature set but retains the basic glTF structure required for this sample
-
- */
 
 /*
 	 Get a node's local matrix from the current translation, rotation and scale values
@@ -718,11 +692,6 @@ void VulkanExample::loadglTFFile(std::string filename)
 
 	this->device = device;
 
-#if defined(__ANDROID__)
-	// On Android all assets are packed with the apk in a compressed form, so we need to open them using the asset manager
-	// We let tinygltf handle this, by passing the asset manager of our app
-	tinygltf::asset_manager = androidApp->activity->assetManager;
-#endif
 	bool fileLoaded = gltfContext.LoadASCIIFromFile(&glTFInput, &error, &warning, filename);
 
 	// Pass some Vulkan resources required for setup and rendering to the glTF model loading class

@@ -109,9 +109,9 @@ set(EXAMPLES
 	#dynamicuniformbuffer	
 	#gears
 	#geometryshader
-	gltfloading
-	#gltfscenerendering
-	#gltfskinning
+	#gltfloading
+	gltfscenerendering
+	gltfskinning
 	#graphicspipelinelibrary
 	#hdr
 	#hostimagecopy

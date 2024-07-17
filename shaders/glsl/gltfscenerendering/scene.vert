@@ -16,6 +16,7 @@ layout (set = 0, binding = 0) uniform UBOScene
 
 layout(push_constant) uniform PushConsts {
 	mat4 model;
+	vec4 meshColor;
 } primitive;
 
 layout (location = 0) out vec3 outNormal;
@@ -24,6 +25,7 @@ layout (location = 2) out vec2 outUV;
 layout (location = 3) out vec3 outViewVec;
 layout (location = 4) out vec3 outLightVec;
 layout (location = 5) out vec4 outTangent;
+layout (location = 6) out vec4 outMeshColor;
 
 void main() 
 {
@@ -37,4 +39,5 @@ void main()
 	vec4 pos = primitive.model * vec4(inPos, 1.0);
 	outLightVec = uboScene.lightPos.xyz - pos.xyz;
 	outViewVec = uboScene.viewPos.xyz - pos.xyz;
+	outMeshColor = primitive.meshColor;
 }

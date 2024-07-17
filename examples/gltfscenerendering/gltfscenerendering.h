@@ -1,17 +1,3 @@
-/*
-* Vulkan Example - Scene rendering
-*
-* Copyright (C) 2020-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*
-* Summary:
-* Render a complete scene loaded from an glTF file. The sample is based on the glTF model loading sample,
-* and adds data structures, functions and shaders required to render a more complex scene using Crytek's Sponza model.
-*
-* This sample comes with a tutorial, see the README.md in this folder
-*/
-
 #define TINYGLTF_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #define TINYGLTF_NO_STB_IMAGE_WRITE
@@ -33,6 +19,7 @@ public:
 	// The class requires some Vulkan objects so it can create it's own resources
 	vks::VulkanDevice* vulkanDevice;
 	VkQueue copyQueue;
+	std::default_random_engine rndEngine;
 
 	// The vertex layout for the samples' model
 	struct Vertex {
