@@ -1,16 +1,3 @@
-/*
-* Vulkan Example - High dynamic range rendering pipeline
-*
-* This sample implements a HDR rendering pipeline that uses a wider range of possible colors via float component image formats
-* It also does a bloom filter on the HDR image
-* The final output is standard definition range (SDR)
-* Note: Does not make use of HDR display capability. HDR is only internally used for offscreen rendering.
-* 
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
@@ -350,6 +337,7 @@ public:
 
 			// Color attachments
 
+			//hdr
 			// Two floating point color buffers
 			createAttachment(VK_FORMAT_R32G32B32A32_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &offscreen.color[0]);
 			createAttachment(VK_FORMAT_R32G32B32A32_SFLOAT, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, &offscreen.color[1]);
@@ -557,14 +545,14 @@ public:
 		// Load glTF models
 		const uint32_t glTFLoadingFlags = vkglTF::FileLoadingFlags::PreTransformVertices | vkglTF::FileLoadingFlags::FlipY;
 		models.skybox.loadFromFile(getAssetPath() + "models/cube.gltf", vulkanDevice, queue, glTFLoadingFlags);
-		std::vector<std::string> filenames = { "sphere.gltf", "teapot.gltf", "torusknot.gltf", "venus.gltf" };
-		modelNames = { "Sphere", "Teapot", "Torusknot", "Venus" };
+		std::vector<std::string> filenames = { "sphere.gltf", "teapot.gltf", "deer.gltf", "venus.gltf" };
+		modelNames = { "Sphere", "Teapot", "Deer", "Venus" };
 		models.objects.resize(filenames.size());
 		for (size_t i = 0; i < filenames.size(); i++) {
 			models.objects[i].loadFromFile(getAssetPath() + "models/" + filenames[i], vulkanDevice, queue, glTFLoadingFlags);
 		}
 		// Load HDR cube map
-		textures.envmap.loadFromFile(getAssetPath() + "textures/hdr/uffizi_cube.ktx", VK_FORMAT_R16G16B16A16_SFLOAT, vulkanDevice, queue);
+		textures.envmap.loadFromFile(getAssetPath() + "textures/hdr/gcanyon_cube.ktx", VK_FORMAT_R16G16B16A16_SFLOAT, vulkanDevice, queue);
 	}
 
 	void setupDescriptors()

@@ -110,10 +110,10 @@ set(EXAMPLES
 	#gears
 	#geometryshader
 	#gltfloading
-	gltfscenerendering
-	gltfskinning
+	#gltfscenerendering
+	#gltfskinning
 	#graphicspipelinelibrary
-	#hdr
+	hdr
 	#hostimagecopy
 	#imgui
 	#indirectdraw
@@ -121,7 +121,7 @@ set(EXAMPLES
 	#inputattachments
 	#instancing
 	#meshshader
-	#multisampling
+	multisampling
 	#multithreading
 	#multiview
 	#negativeviewportheight	
