@@ -1,11 +1,3 @@
-/*
-* Vulkan Example - Shadow mapping for directional light sources
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
@@ -87,12 +79,7 @@ public:
 	// 16 bits of depth is enough for such a small scene
 	const VkFormat offscreenDepthFormat{ VK_FORMAT_D16_UNORM };
 	// Shadow map dimension
-#if defined(__ANDROID__)
-	// Use a smaller size on Android for performance reasons
-	const uint32_t shadowMapize{ 1024 };
-#else
 	const uint32_t shadowMapize{ 2048 };
-#endif
 
 	VulkanExample() : VulkanExampleBase()
 	{

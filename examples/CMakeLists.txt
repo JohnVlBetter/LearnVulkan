@@ -113,7 +113,7 @@ set(EXAMPLES
 	#gltfscenerendering
 	#gltfskinning
 	#graphicspipelinelibrary
-	hdr
+	#hdr
 	#hostimagecopy
 	#imgui
 	#indirectdraw
@@ -151,7 +151,7 @@ set(EXAMPLES
 	#renderheadless
 	#screenshot
 	#shaderobjects
-	#shadowmapping
+	shadowmapping
 	#shadowmappingomni
 	#shadowmappingcascade
 	#specializationconstants
