@@ -151,9 +151,9 @@ set(EXAMPLES
 	#renderheadless
 	#screenshot
 	#shaderobjects
-	shadowmapping
+	#shadowmapping
 	#shadowmappingomni
-	#shadowmappingcascade
+	shadowmappingcascade
 	#specializationconstants
 	#sphericalenvmapping
 	#ssao

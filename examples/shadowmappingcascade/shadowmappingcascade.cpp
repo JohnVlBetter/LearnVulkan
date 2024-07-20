@@ -1,30 +1,7 @@
-/*
-	Vulkan Example - Cascaded shadow mapping for directional light sources
-	Copyright by Sascha Willems - www.saschawillems.de
-	This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
-/*
-	This example implements projective cascaded shadow mapping. This technique splits up the camera frustum into
-	multiple frustums with each getting its own full-res shadow map, implemented as a layered depth-only image.
-	The shader then selects the proper shadow map layer depending on what split of the frustum the depth value
-	to compare fits into.
-
-	This results in a better shadow map resolution distribution that can be tweaked even further by increasing
-	the number of frustum splits.
-
-	A further optimization could be done using a geometry shader to do a single-pass render for the depth map
-	cascades instead of multiple passes (geometry shaders are not supported on all target devices).
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
-#if defined(__ANDROID__)
-#define SHADOWMAP_DIM 2048
-#else
 #define SHADOWMAP_DIM 4096
-#endif
 
 #define SHADOW_MAP_CASCADE_COUNT 4
 
