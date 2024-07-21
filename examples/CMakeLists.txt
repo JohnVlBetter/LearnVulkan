@@ -152,7 +152,7 @@ set(EXAMPLES
 	#screenshot
 	#shaderobjects
 	#shadowmapping
-	shadowmappingomni
+	#shadowmappingomni
 	#shadowmappingcascade
 	#specializationconstants
 	#sphericalenvmapping
@@ -167,7 +167,7 @@ set(EXAMPLES
 	#texturearray
 	#texturecubemap
 	#texturecubemaparray
-	#texturemipmapgen
+	texturemipmapgen
 	#texturesparseresidency
 	#triangle
 	#variablerateshading
