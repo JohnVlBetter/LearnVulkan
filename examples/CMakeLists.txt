@@ -121,7 +121,7 @@ set(EXAMPLES
 	#inputattachments
 	#instancing
 	#meshshader
-	multisampling
+	#multisampling
 	#multithreading
 	#multiview
 	#negativeviewportheight	
@@ -152,8 +152,8 @@ set(EXAMPLES
 	#screenshot
 	#shaderobjects
 	#shadowmapping
-	#shadowmappingomni
-	shadowmappingcascade
+	shadowmappingomni
+	#shadowmappingcascade
 	#specializationconstants
 	#sphericalenvmapping
 	#ssao

@@ -1,11 +1,3 @@
-/*
-* Vulkan Example - Omni directional shadows using a dynamic cube map
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
@@ -514,7 +506,7 @@ public:
 	{
 		const uint32_t glTFLoadingFlags = vkglTF::FileLoadingFlags::PreTransformVertices | vkglTF::FileLoadingFlags::PreMultiplyVertexColors | vkglTF::FileLoadingFlags::FlipY;
 		models.debugcube.loadFromFile(getAssetPath() + "models/cube.gltf", vulkanDevice, queue, glTFLoadingFlags);
-		models.scene.loadFromFile(getAssetPath() + "models/shadowscene_fire.gltf", vulkanDevice, queue, glTFLoadingFlags);
+		models.scene.loadFromFile(getAssetPath() + "models/sponza/sponza.gltf", vulkanDevice, queue, glTFLoadingFlags);
 	}
 
 	void setupDescriptors()
