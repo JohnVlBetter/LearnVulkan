@@ -121,13 +121,13 @@ set(EXAMPLES
 	#inputattachments
 	#instancing
 	#meshshader
-	#multisampling
+	multisampling
 	#multithreading
 	#multiview
 	#negativeviewportheight	
 	#occlusionquery
 	#offscreen
-	#oit
+	oit
 	#parallaxmapping
 	#particlesystem
 	#pbrbasic
@@ -149,7 +149,7 @@ set(EXAMPLES
 	#raytracingshadows
 	#raytracingtextures
 	#renderheadless
-	#screenshot
+	screenshot
 	#shaderobjects
 	#shadowmapping
 	#shadowmappingomni
@@ -167,7 +167,7 @@ set(EXAMPLES
 	#texturearray
 	#texturecubemap
 	#texturecubemaparray
-	texturemipmapgen
+	#texturemipmapgen
 	#texturesparseresidency
 	#triangle
 	#variablerateshading
