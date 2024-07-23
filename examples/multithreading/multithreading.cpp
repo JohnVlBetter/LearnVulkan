@@ -1,11 +1,3 @@
-/*
-* Vulkan Example - Multi threaded command buffer generation and rendering
-*
-* Copyright (C) 2016-2024 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 
 #include "threadpool.hpp"
@@ -102,13 +94,9 @@ public:
 		// Get number of max. concurrent threads
 		numThreads = std::thread::hardware_concurrency();
 		assert(numThreads > 0);
-#if defined(__ANDROID__)
-		LOGD("numThreads = %d", numThreads);
-#else
 		std::cout << "numThreads = " << numThreads << std::endl;
-#endif
 		threadPool.setThreadCount(numThreads);
-		numObjectsPerThread = 512 / numThreads;
+		numObjectsPerThread = 1024 / numThreads;
 		rndEngine.seed(benchmark.active ? 0 : (unsigned)time(nullptr));
 	}
 
@@ -403,7 +391,7 @@ public:
 	void loadAssets()
 	{
 		const uint32_t glTFLoadingFlags = vkglTF::FileLoadingFlags::PreTransformVertices | vkglTF::FileLoadingFlags::PreMultiplyVertexColors | vkglTF::FileLoadingFlags::FlipY;
-		models.ufo.loadFromFile(getAssetPath() + "models/retroufo_red_lowpoly.gltf",vulkanDevice, queue,glTFLoadingFlags);
+		models.ufo.loadFromFile(getAssetPath() + "models/deer.gltf",vulkanDevice, queue,glTFLoadingFlags);
 		models.starSphere.loadFromFile(getAssetPath() + "models/sphere.gltf", vulkanDevice, queue, glTFLoadingFlags);
 	}
 
