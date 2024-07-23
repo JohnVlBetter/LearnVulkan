@@ -1,19 +1,7 @@
-/*
-* Vulkan Example - Instanced mesh rendering, uses a separate vertex buffer for instanced data
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
-#if defined(__ANDROID__)
-#define INSTANCE_COUNT 4096
-#else
 #define INSTANCE_COUNT 8192
-#endif
 
 class VulkanExample : public VulkanExampleBase
 {
@@ -260,6 +248,7 @@ public:
 			// Binding point 0: Mesh vertex layout description at per-vertex rate
 			vks::initializers::vertexInputBindingDescription(0, sizeof(vkglTF::Vertex), VK_VERTEX_INPUT_RATE_VERTEX),
 			// Binding point 1: Instanced data at per-instance rate
+			//重点在这，是per instance的传输数据
 			vks::initializers::vertexInputBindingDescription(1, sizeof(InstanceData), VK_VERTEX_INPUT_RATE_INSTANCE)
 		};
 
@@ -278,6 +267,7 @@ public:
 			vks::initializers::vertexInputAttributeDescription(0, 3, VK_FORMAT_R32G32B32_SFLOAT, sizeof(float) * 8),	// Location 3: Color
 			// Per-Instance attributes
 			// These are advanced for each instance rendered
+			//重点在这，是per instance的传输数据
 			vks::initializers::vertexInputAttributeDescription(1, 4, VK_FORMAT_R32G32B32_SFLOAT, 0),					// Location 4: Position
 			vks::initializers::vertexInputAttributeDescription(1, 5, VK_FORMAT_R32G32B32_SFLOAT, sizeof(float) * 3),	// Location 5: Rotation
 			vks::initializers::vertexInputAttributeDescription(1, 6, VK_FORMAT_R32_SFLOAT,sizeof(float) * 6),			// Location 6: Scale

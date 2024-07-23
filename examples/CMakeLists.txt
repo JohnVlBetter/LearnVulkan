@@ -119,10 +119,10 @@ set(EXAMPLES
 	#indirectdraw
 	#inlineuniformblocks
 	#inputattachments
-	#instancing
+	instancing
 	#meshshader
 	#multisampling
-	multithreading
+	#multithreading
 	#multiview
 	#negativeviewportheight	
 	#occlusionquery
