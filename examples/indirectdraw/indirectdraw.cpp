@@ -1,54 +1,29 @@
-/*
-* Vulkan Example - Indirect drawing
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*
-* Summary:
-* Use a device local buffer that stores draw commands for instanced rendering of different meshes stored
-* in the same buffer.
-*
-* Indirect drawing offloads draw command generation and offers the ability to update them on the GPU
-* without the CPU having to touch the buffer again, also reducing the number of drawcalls.
-*
-* The example shows how to setup and fill such a buffer on the CPU side, stages it to the device and
-* shows how to render it using only one draw command.
-*
-* See readme.md for details
-*
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
-// Number of instances per object
-#if defined(__ANDROID__)
-#define OBJECT_INSTANCE_COUNT 1024
-// Circular range of plant distribution
-#define PLANT_RADIUS 20.0f
-#else
 #define OBJECT_INSTANCE_COUNT 2048
 // Circular range of plant distribution
 #define PLANT_RADIUS 25.0f
-#endif
 
 class VulkanExample : public VulkanExampleBase
 {
 public:
-	struct {
+	struct
+	{
 		vks::Texture2DArray plants;
 		vks::Texture2D ground;
 	} textures;
 
-	struct {
+	struct
+	{
 		vkglTF::Model plants;
 		vkglTF::Model ground;
 		vkglTF::Model skysphere;
 	} models;
 
 	// Per-instance data block
-	struct InstanceData {
+	struct InstanceData
+	{
 		glm::vec3 pos;
 		glm::vec3 rot;
 		float scale;
@@ -59,25 +34,27 @@ public:
 	vks::Buffer instanceBuffer;
 	// Contains the indirect drawing commands
 	vks::Buffer indirectCommandsBuffer;
-	uint32_t indirectDrawCount{ 0 };
+	uint32_t indirectDrawCount{0};
 
-	struct UniformData {
+	struct UniformData
+	{
 		glm::mat4 projection;
 		glm::mat4 view;
 	} uniformData;
 	vks::Buffer uniformBuffer;
 
-	struct {
-		VkPipeline plants{ VK_NULL_HANDLE };
-		VkPipeline ground{ VK_NULL_HANDLE };
-		VkPipeline skysphere{ VK_NULL_HANDLE };
+	struct
+	{
+		VkPipeline plants{VK_NULL_HANDLE};
+		VkPipeline ground{VK_NULL_HANDLE};
+		VkPipeline skysphere{VK_NULL_HANDLE};
 	} pipelines;
 
-	VkPipelineLayout pipelineLayout{ VK_NULL_HANDLE };
-	VkDescriptorSet descriptorSet{ VK_NULL_HANDLE };
-	VkDescriptorSetLayout descriptorSetLayout{ VK_NULL_HANDLE };
+	VkPipelineLayout pipelineLayout{VK_NULL_HANDLE};
+	VkDescriptorSet descriptorSet{VK_NULL_HANDLE};
+	VkDescriptorSetLayout descriptorSetLayout{VK_NULL_HANDLE};
 
-	VkSampler samplerRepeat{ VK_NULL_HANDLE };
+	VkSampler samplerRepeat{VK_NULL_HANDLE};
 
 	uint32_t objectCount = 0;
 
@@ -96,7 +73,8 @@ public:
 
 	~VulkanExample()
 	{
-		if (device) {
+		if (device)
+		{
 			vkDestroyPipeline(device, pipelines.plants, nullptr);
 			vkDestroyPipeline(device, pipelines.ground, nullptr);
 			vkDestroyPipeline(device, pipelines.skysphere, nullptr);
@@ -114,11 +92,13 @@ public:
 	virtual void getEnabledFeatures()
 	{
 		// Example uses multi draw indirect if available
-		if (deviceFeatures.multiDrawIndirect) {
+		if (deviceFeatures.multiDrawIndirect)
+		{
 			enabledFeatures.multiDrawIndirect = VK_TRUE;
 		}
 		// Enable anisotropic filtering if supported
-		if (deviceFeatures.samplerAnisotropy) {
+		if (deviceFeatures.samplerAnisotropy)
+		{
 			enabledFeatures.samplerAnisotropy = VK_TRUE;
 		}
 	};
@@ -128,8 +108,8 @@ public:
 		VkCommandBufferBeginInfo cmdBufInfo = vks::initializers::commandBufferBeginInfo();
 
 		VkClearValue clearValues[2];
-		clearValues[0].color = { { 0.18f, 0.27f, 0.5f, 0.0f } };
-		clearValues[1].depthStencil = { 1.0f, 0 };
+		clearValues[0].color = {{0.18f, 0.27f, 0.5f, 0.0f}};
+		clearValues[1].depthStencil = {1.0f, 0};
 
 		VkRenderPassBeginInfo renderPassBeginInfo = vks::initializers::renderPassBeginInfo();
 		renderPassBeginInfo.renderPass = renderPass;
@@ -153,7 +133,7 @@ public:
 			VkRect2D scissor = vks::initializers::rect2D(width, height, 0, 0);
 			vkCmdSetScissor(drawCmdBuffers[i], 0, 1, &scissor);
 
-			VkDeviceSize offsets[1] = { 0 };
+			VkDeviceSize offsets[1] = {0};
 			vkCmdBindDescriptorSets(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSet, 0, NULL);
 
 			// Skysphere
@@ -237,8 +217,7 @@ public:
 			// Binding 1: Plants texture array combined
 			vks::initializers::writeDescriptorSet(descriptorSet, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, &textures.plants.descriptor),
 			// Binding 2: Ground texture combined
-			vks::initializers::writeDescriptorSet(descriptorSet, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 2, &textures.ground.descriptor)
-		};
+			vks::initializers::writeDescriptorSet(descriptorSet, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 2, &textures.ground.descriptor)};
 		vkUpdateDescriptorSets(device, static_cast<uint32_t>(writeDescriptorSets.size()), writeDescriptorSets.data(), 0, nullptr);
 	}
 
@@ -279,11 +258,10 @@ public:
 		// Vertex input bindings
 		// The instancing pipeline uses a vertex input state with two bindings
 		bindingDescriptions = {
-		    // Binding point 0: Mesh vertex layout description at per-vertex rate
-		    vks::initializers::vertexInputBindingDescription(0, sizeof(vkglTF::Vertex), VK_VERTEX_INPUT_RATE_VERTEX),
-		    // Binding point 1: Instanced data at per-instance rate
-		    vks::initializers::vertexInputBindingDescription(1, sizeof(InstanceData), VK_VERTEX_INPUT_RATE_INSTANCE)
-		};
+			// Binding point 0: Mesh vertex layout description at per-vertex rate
+			vks::initializers::vertexInputBindingDescription(0, sizeof(vkglTF::Vertex), VK_VERTEX_INPUT_RATE_VERTEX),
+			// Binding point 1: Instanced data at per-instance rate
+			vks::initializers::vertexInputBindingDescription(1, sizeof(InstanceData), VK_VERTEX_INPUT_RATE_INSTANCE)};
 
 		// Vertex attribute bindings
 		// Note that the shader declaration for per-vertex and per-instance attributes is the same, the different input rates are only stored in the bindings:
@@ -292,22 +270,22 @@ public:
 		//	...
 		//	layout (location = 4) in vec3 instancePos;	Per-Instance
 		attributeDescriptions = {
-		    // Per-vertex attributes
-		    // These are advanced for each vertex fetched by the vertex shader
-		    vks::initializers::vertexInputAttributeDescription(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0),								// Location 0: Position
-		    vks::initializers::vertexInputAttributeDescription(0, 1, VK_FORMAT_R32G32B32_SFLOAT, sizeof(float) * 3),				// Location 1: Normal
-		    vks::initializers::vertexInputAttributeDescription(0, 2, VK_FORMAT_R32G32_SFLOAT, sizeof(float) * 6),					// Location 2: Texture coordinates
-		    vks::initializers::vertexInputAttributeDescription(0, 3, VK_FORMAT_R32G32B32_SFLOAT, sizeof(float) * 8),				// Location 3: Color
-		    // Per-Instance attributes
-		    // These are fetched for each instance rendered
-		    vks::initializers::vertexInputAttributeDescription(1, 4, VK_FORMAT_R32G32B32_SFLOAT, offsetof(InstanceData, pos)),	// Location 4: Position
-		    vks::initializers::vertexInputAttributeDescription(1, 5, VK_FORMAT_R32G32B32_SFLOAT, offsetof(InstanceData, rot)),	// Location 5: Rotation
-		    vks::initializers::vertexInputAttributeDescription(1, 6, VK_FORMAT_R32_SFLOAT, offsetof(InstanceData, scale)),		// Location 6: Scale
-		    vks::initializers::vertexInputAttributeDescription(1, 7, VK_FORMAT_R32_SINT, offsetof(InstanceData, texIndex)),		// Location 7: Texture array layer index
+			// Per-vertex attributes
+			// These are advanced for each vertex fetched by the vertex shader
+			vks::initializers::vertexInputAttributeDescription(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0),				 // Location 0: Position
+			vks::initializers::vertexInputAttributeDescription(0, 1, VK_FORMAT_R32G32B32_SFLOAT, sizeof(float) * 3), // Location 1: Normal
+			vks::initializers::vertexInputAttributeDescription(0, 2, VK_FORMAT_R32G32_SFLOAT, sizeof(float) * 6),	 // Location 2: Texture coordinates
+			vks::initializers::vertexInputAttributeDescription(0, 3, VK_FORMAT_R32G32B32_SFLOAT, sizeof(float) * 8), // Location 3: Color
+			// Per-Instance attributes
+			// These are fetched for each instance rendered
+			vks::initializers::vertexInputAttributeDescription(1, 4, VK_FORMAT_R32G32B32_SFLOAT, offsetof(InstanceData, pos)), // Location 4: Position
+			vks::initializers::vertexInputAttributeDescription(1, 5, VK_FORMAT_R32G32B32_SFLOAT, offsetof(InstanceData, rot)), // Location 5: Rotation
+			vks::initializers::vertexInputAttributeDescription(1, 6, VK_FORMAT_R32_SFLOAT, offsetof(InstanceData, scale)),	   // Location 6: Scale
+			vks::initializers::vertexInputAttributeDescription(1, 7, VK_FORMAT_R32_SINT, offsetof(InstanceData, texIndex)),	   // Location 7: Texture array layer index
 		};
 		inputState.pVertexBindingDescriptions = bindingDescriptions.data();
 		inputState.pVertexAttributeDescriptions = attributeDescriptions.data();
-		inputState.vertexBindingDescriptionCount   = static_cast<uint32_t>(bindingDescriptions.size());
+		inputState.vertexBindingDescriptionCount = static_cast<uint32_t>(bindingDescriptions.size());
 		inputState.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
 
 		pipelineCreateInfo.pVertexInputState = &inputState;
@@ -395,7 +373,8 @@ public:
 		std::default_random_engine rndEngine(benchmark.active ? 0 : (unsigned)time(nullptr));
 		std::uniform_real_distribution<float> uniformDist(0.0f, 1.0f);
 
-		for (uint32_t i = 0; i < objectCount; i++) {
+		for (uint32_t i = 0; i < objectCount; i++)
+		{
 			float theta = 2 * float(M_PI) * uniformDist(rndEngine);
 			float phi = acos(1 - 2 * uniformDist(rndEngine));
 			instanceData[i].rot = glm::vec3(0.0f, float(M_PI) * uniformDist(rndEngine), 0.0f);
@@ -460,7 +439,8 @@ public:
 
 	virtual void render()
 	{
-		if (!prepared) {
+		if (!prepared)
+		{
 			return;
 		}
 		updateUniformBuffer();
@@ -469,12 +449,15 @@ public:
 
 	virtual void OnUpdateUIOverlay(vks::UIOverlay *overlay)
 	{
-		if (!vulkanDevice->features.multiDrawIndirect) {
-			if (overlay->header("Info")) {
+		if (!vulkanDevice->features.multiDrawIndirect)
+		{
+			if (overlay->header("Info"))
+			{
 				overlay->text("multiDrawIndirect not supported");
 			}
 		}
-		if (overlay->header("Statistics")) {
+		if (overlay->header("Statistics"))
+		{
 			overlay->text("Objects: %d", objectCount);
 		}
 	}

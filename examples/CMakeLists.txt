@@ -116,10 +116,10 @@ set(EXAMPLES
 	#hdr
 	#hostimagecopy
 	#imgui
-	#indirectdraw
+	indirectdraw
 	#inlineuniformblocks
 	#inputattachments
-	instancing
+	#instancing
 	#meshshader
 	#multisampling
 	#multithreading
