@@ -1,11 +1,3 @@
-/*
-* Vulkan Example - Using occlusion query for visibility testing
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
@@ -165,6 +157,7 @@ public:
 			vkCmdBindDescriptorSets(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSet, 0, NULL);
 			models.plane.draw(drawCmdBuffers[i]);
 
+			//在这查询遮挡
 			// Teapot
 			vkCmdBeginQuery(drawCmdBuffers[i], queryPool, 0, VK_FLAGS_NONE);
 			vkCmdBindDescriptorSets(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets.teapot, 0, NULL);
@@ -358,6 +351,8 @@ public:
 	{
 		uboVS.projection = camera.matrices.perspective;
 		uboVS.view = camera.matrices.view;
+
+		//在这走ubo传输是否可见
 
 		// Occluder
 		uboVS.visible = 1.0f;

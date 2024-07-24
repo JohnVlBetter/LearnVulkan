@@ -116,7 +116,7 @@ set(EXAMPLES
 	#hdr
 	#hostimagecopy
 	#imgui
-	indirectdraw
+	#indirectdraw
 	#inlineuniformblocks
 	#inputattachments
 	#instancing
@@ -125,7 +125,7 @@ set(EXAMPLES
 	#multithreading
 	#multiview
 	#negativeviewportheight	
-	#occlusionquery
+	occlusionquery
 	#offscreen
 	#oit
 	#parallaxmapping
