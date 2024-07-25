@@ -125,7 +125,7 @@ set(EXAMPLES
 	#multithreading
 	#multiview
 	#negativeviewportheight	
-	occlusionquery
+	#occlusionquery
 	#offscreen
 	#oit
 	#parallaxmapping
@@ -134,7 +134,7 @@ set(EXAMPLES
 	#pbribl
 	#pbrtexture
 	#pipelines
-	#pipelinestatistics
+	pipelinestatistics
 	#pushconstants
 	#pushdescriptors
 	#radialblur

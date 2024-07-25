@@ -1,11 +1,3 @@
-/*
-* Vulkan Example - Retrieving pipeline statistics
-*
-* Copyright (C) 2017-2024 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
@@ -101,6 +93,7 @@ public:
 		}
 		pipelineStats.resize(pipelineStatNames.size());
 
+		//这里创建的查询列表
 		VkQueryPoolCreateInfo queryPoolInfo = {};
 		queryPoolInfo.sType = VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO;
 		// This query pool will store pipeline statistics
@@ -177,6 +170,7 @@ public:
 			VkDeviceSize offsets[1] = { 0 };
 
 			// Start capture of pipeline statistics
+			// 在这查询
 			vkCmdBeginQuery(drawCmdBuffers[i], queryPool, 0, 0);
 
 			vkCmdBindPipeline(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
