@@ -130,11 +130,11 @@ set(EXAMPLES
 	#oit
 	#parallaxmapping
 	#particlesystem
-	#pbrbasic
+	pbrbasic
 	#pbribl
 	#pbrtexture
 	#pipelines
-	pipelinestatistics
+	#pipelinestatistics
 	#pushconstants
 	#pushdescriptors
 	#radialblur
