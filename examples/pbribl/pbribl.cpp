@@ -1,15 +1,3 @@
-/*
-* Vulkan Example - Physical based rendering with image based lighting
-*
-* This sample adds imaged based lighting from an environment map to the PBR equation
-* 
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
-// For reference see http://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 

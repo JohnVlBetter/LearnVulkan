@@ -130,8 +130,8 @@ set(EXAMPLES
 	#oit
 	#parallaxmapping
 	#particlesystem
-	pbrbasic
-	#pbribl
+	#pbrbasic
+	pbribl
 	#pbrtexture
 	#pipelines
 	#pipelinestatistics
