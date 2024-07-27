@@ -131,8 +131,8 @@ set(EXAMPLES
 	#parallaxmapping
 	#particlesystem
 	#pbrbasic
-	pbribl
-	#pbrtexture
+	#pbribl
+	pbrtexture
 	#pipelines
 	#pipelinestatistics
 	#pushconstants

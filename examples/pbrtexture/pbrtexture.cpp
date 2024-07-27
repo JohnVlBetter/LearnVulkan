@@ -1,13 +1,3 @@
-/*
-* Vulkan Example - Physical based rendering a textured object (metal/roughness workflow) with image based lighting
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
-// For reference see http://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
