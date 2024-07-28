@@ -97,8 +97,8 @@ set(EXAMPLES
 	#debugprintf
 	#debugutils
 	#deferred
-	#deferredmultisampling
-	#deferredshadows
+	deferredmultisampling
+	deferredshadows
 	#descriptorbuffer
 	#descriptorindexing
 	#descriptorsets

@@ -1,13 +1,3 @@
-/*
-* Vulkan Example - Multi sampling with explicit resolve for deferred shading example
-*
-* This sample adds hardware accelerated multi sampling to the deferred rendering sample
-* 
-* Copyright (C) 2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanFrameBuffer.hpp"
 #include "VulkanglTFModel.h"
@@ -88,9 +78,6 @@ public:
 		title = "Multi sampled deferred shading";
 		camera.type = Camera::CameraType::firstperson;
 		camera.movementSpeed = 5.0f;
-#ifndef __ANDROID__
-		camera.rotationSpeed = 0.25f;
-#endif
 		camera.position = { 2.15f, 0.3f, -8.75f };
 		camera.setRotation(glm::vec3(-0.75f, 12.5f, 0.0f));
 		camera.setPerspective(60.0f, (float)width / (float)height, 0.1f, 256.0f);
@@ -144,14 +131,8 @@ public:
 	{
 		offscreenframeBuffers = new vks::Framebuffer(vulkanDevice);
 
-#if defined(__ANDROID__)
-		// Use max. screen dimension as deferred framebuffer size
-		offscreenframeBuffers->width = std::max(width, height);
-		offscreenframeBuffers->height = std::max(width, height);
-#else
 		offscreenframeBuffers->width = 2048;
 		offscreenframeBuffers->height = 2048;
-#endif
 
 		// Four attachments (3 color, 1 depth)
 		vks::AttachmentCreateInfo attachmentInfo = {};
