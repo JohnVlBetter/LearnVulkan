@@ -85,20 +85,20 @@ endfunction(buildExamples)
 
 set(EXAMPLES
 	#bloom
-	#computecloth
+	computecloth
 	#computecullandlod
 	#computeheadless
-	#computenbody
-	#computeparticles
-	#computeraytracing
-	#computeshader
+	computenbody
+	computeparticles
+	computeraytracing
+	computeshader
 	#conditionalrender
 	#conservativeraster
 	#debugprintf
 	#debugutils
 	#deferred
-	deferredmultisampling
-	deferredshadows
+	#deferredmultisampling
+	#deferredshadows
 	#descriptorbuffer
 	#descriptorindexing
 	#descriptorsets
@@ -156,7 +156,7 @@ set(EXAMPLES
 	#shadowmappingcascade
 	#specializationconstants
 	#sphericalenvmapping
-	#ssao
+	ssao
 	#stencilbuffer
 	#subpasses
 	#terraintessellation

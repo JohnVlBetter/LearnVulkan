@@ -1,17 +1,3 @@
-/*
-* Vulkan Example - Compute shader based ray tracing
-* 
-* This samples implements a basic ray tracer with materials and reflections using a compute shader
-* Shader storage buffers are used to pass geometry information for spheres and planes to the computer shader
-* The compute shader then uses these as the scene geometry for ray tracing and outputs the results to a storage image
-* The graphics part of the sample then displays that image full screen
-* Not to be confused with actual hardware accelerated ray tracing
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 
 class VulkanExample : public VulkanExampleBase
@@ -85,11 +71,6 @@ public:
 		camera.setTranslation(glm::vec3(0.0f, 0.0f, -4.0f));
 		camera.rotationSpeed = 0.0f;
 		camera.movementSpeed = 2.5f;
-		
-#if (defined(VK_USE_PLATFORM_MACOS_MVK) || defined(VK_USE_PLATFORM_METAL_EXT))
-		// SRS - on macOS set environment variable to ensure MoltenVK disables Metal argument buffers for this example
-		setenv("MVK_CONFIG_USE_METAL_ARGUMENT_BUFFERS", "0", 1);
-#endif
 	}
 
 	~VulkanExample()
@@ -116,13 +97,7 @@ public:
 	// Prepare a storage image that is used to store the compute shader ray tracing output
 	void prepareStorageImage()
 	{		
-#if defined(__ANDROID__)
-		// Use a smaller image on Android for performance reasons
-		const uint32_t textureSize = 1024;
-#else
 		const uint32_t textureSize = 2048;
-#endif
-
 		const VkFormat format = VK_FORMAT_R8G8B8A8_UNORM;
 
 		// Get device properties for the requested texture format

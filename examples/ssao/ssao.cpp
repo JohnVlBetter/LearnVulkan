@@ -1,11 +1,3 @@
-/*
-* Vulkan Example - Screen space ambient occlusion example
-*
-* Copyright (C) by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
@@ -13,11 +5,7 @@
 #define SSAO_RADIUS 0.3f
 
 // We use a smaller noise kernel size on Android due to lower computational power
-#if defined(__ANDROID__)
-#define SSAO_NOISE_DIM 4
-#else
 #define SSAO_NOISE_DIM 8
-#endif
 
 class VulkanExample : public VulkanExampleBase
 {
@@ -120,9 +108,6 @@ public:
 	{
 		title = "Screen space ambient occlusion";
 		camera.type = Camera::CameraType::firstperson;
-#ifndef __ANDROID__
-		camera.rotationSpeed = 0.25f;
-#endif
 		camera.position = { 1.0f, 0.75f, 0.0f };
 		camera.setRotation(glm::vec3(0.0f, 90.0f, 0.0f));
 		camera.setPerspective(60.0f, (float)width / (float)height, uboSceneParams.nearPlane, uboSceneParams.farPlane);
@@ -238,13 +223,8 @@ public:
 	void prepareOffscreenFramebuffers()
 	{
 		// Attachments
-#if defined(__ANDROID__)
-		const uint32_t ssaoWidth = width / 2;
-		const uint32_t ssaoHeight = height / 2;
-#else
 		const uint32_t ssaoWidth = width;
 		const uint32_t ssaoHeight = height;
-#endif
 
 		frameBuffers.offscreen.setSize(width, height);
 		frameBuffers.ssao.setSize(ssaoWidth, ssaoHeight);

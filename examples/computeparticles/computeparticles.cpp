@@ -1,21 +1,6 @@
-/*
-* Vulkan Example - Attraction based compute shader particle system
-*
-* Updated compute shader by Lukas Bergdoll (https://github.com/Voultapher)
-*
-* Copyright (C) 2016-2024 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 
-#if defined(__ANDROID__)
-// Lower particle count on Android for performance reasons
-#define PARTICLE_COUNT 128 * 1024
-#else
 #define PARTICLE_COUNT 256 * 1024
-#endif
 
 class VulkanExample : public VulkanExampleBase
 {

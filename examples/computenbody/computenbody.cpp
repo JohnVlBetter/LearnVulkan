@@ -1,24 +1,6 @@
-/*
-* Vulkan Example - Compute shader N-body simulation using two passes and shared compute shader memory
-*
-* This sample shows how to combine compute and graphics for doing N-body particle simulaton
-* It calculates the particle system movement using two separate compute passes: calculating particle positions and integrating particles
-* For that a shader storage buffer is used which is then used as a vertex buffer for drawing the particle system with a graphics pipeline
-* To optimize performance, the compute shaders use shared memory
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 
-#if defined(__ANDROID__)
-// Lower particle count on Android for performance reasons
-#define PARTICLES_PER_ATTRACTOR 3 * 1024
-#else
 #define PARTICLES_PER_ATTRACTOR 4 * 1024
-#endif
 
 class VulkanExample : public VulkanExampleBase
 {

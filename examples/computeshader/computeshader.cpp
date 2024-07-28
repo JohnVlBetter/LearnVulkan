@@ -1,13 +1,3 @@
-/*
-* Vulkan Example - Compute shader image processing
-*
-* This sample uses a compute shader to apply different filters to an image
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 
 // Vertex layout for this example

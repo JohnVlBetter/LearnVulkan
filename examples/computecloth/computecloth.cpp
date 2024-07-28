@@ -1,14 +1,3 @@
-/*
-* Vulkan Example - Compute shader cloth simulation
-*
-* A compute shader updates a shader storage buffer that contains particles held together by springs and also does basic
-* collision detection against a sphere. This storage buffer is then used as the vertex input for the graphics part of the sample
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
