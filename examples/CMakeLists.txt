@@ -85,8 +85,8 @@ endfunction(buildExamples)
 
 set(EXAMPLES
 	#bloom
-	computecloth
-	computecullandlod
+	#computecloth
+	#computecullandlod
 	#computeheadless
 	#computenbody
 	#computeparticles
@@ -108,7 +108,7 @@ set(EXAMPLES
 	#dynamicstate
 	#dynamicuniformbuffer	
 	#gears
-	#geometryshader
+	geometryshader
 	#gltfloading
 	#gltfscenerendering
 	#gltfskinning
@@ -172,7 +172,7 @@ set(EXAMPLES
 	#triangle
 	#variablerateshading
 	#vertexattributes
-	#viewportarray
+	viewportarray
 	#vulkanscene
 )
 
