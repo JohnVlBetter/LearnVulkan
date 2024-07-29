@@ -1,23 +1,8 @@
-/*
-* Vulkan Example - Compute shader culling and LOD using indirect rendering
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 #include "frustum.hpp"
 
-
-// Total number of objects (^3) in the scene
-#if defined(__ANDROID__)
-#define OBJECT_COUNT 32
-#else
 #define OBJECT_COUNT 64
-#endif
 
 #define MAX_LOD_LEVEL 5
 

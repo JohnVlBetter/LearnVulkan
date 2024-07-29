@@ -86,12 +86,12 @@ endfunction(buildExamples)
 set(EXAMPLES
 	#bloom
 	computecloth
-	#computecullandlod
+	computecullandlod
 	#computeheadless
-	computenbody
-	computeparticles
-	computeraytracing
-	computeshader
+	#computenbody
+	#computeparticles
+	#computeraytracing
+	#computeshader
 	#conditionalrender
 	#conservativeraster
 	#debugprintf
@@ -132,7 +132,7 @@ set(EXAMPLES
 	#particlesystem
 	#pbrbasic
 	#pbribl
-	pbrtexture
+	#pbrtexture
 	#pipelines
 	#pipelinestatistics
 	#pushconstants
