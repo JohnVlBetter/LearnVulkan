@@ -1,14 +1,3 @@
-/*
-* Vulkan Example - Dynamic terrain tessellation
-* 
-* This samples draw a terrain from a heightmap texture and uses tessellation to add in details based on camera distance
-* The height level is generated in the vertex shader by reading from the heightmap image
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 #include "frustum.hpp"
@@ -348,21 +337,7 @@ public:
 
 		// We load the heightmap from an un-compressed ktx image with one channel that contains heights
 		std::string filename = getAssetPath() + "textures/terrain_heightmap_r16.ktx";
-#if defined(__ANDROID__)
-		// On Android we need to load the file using the asset manager
-		AAsset* asset = AAssetManager_open(androidApp->activity->assetManager, filename.c_str(), AASSET_MODE_STREAMING);
-		assert(asset);
-		size_t size = AAsset_getLength(asset);
-		assert(size > 0);
-		ktx_uint8_t* textureData = new ktx_uint8_t[size];
-		AAsset_read(asset, textureData, size);
-		AAsset_close(asset);
-		result = ktxTexture_CreateFromMemory(textureData, size, KTX_TEXTURE_CREATE_LOAD_IMAGE_DATA_BIT, &ktxTexture);
-		delete[] textureData;
-
-#else
 		result = ktxTexture_CreateFromNamedFile(filename.c_str(), KTX_TEXTURE_CREATE_LOAD_IMAGE_DATA_BIT, &ktxTexture);
-#endif
 		assert(result == KTX_SUCCESS);
 		ktx_size_t ktxSize = ktxTexture_GetImageSize(ktxTexture, 0);
 		ktx_uint8_t* ktxImage = ktxTexture_GetData(ktxTexture);

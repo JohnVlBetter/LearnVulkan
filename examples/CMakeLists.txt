@@ -102,13 +102,13 @@ set(EXAMPLES
 	#descriptorbuffer
 	#descriptorindexing
 	#descriptorsets
-	#displacement
+	displacement
 	#distancefieldfonts
 	#dynamicrendering
 	#dynamicstate
 	#dynamicuniformbuffer	
 	#gears
-	geometryshader
+	#geometryshader
 	#gltfloading
 	#gltfscenerendering
 	#gltfskinning
@@ -156,11 +156,11 @@ set(EXAMPLES
 	#shadowmappingcascade
 	#specializationconstants
 	#sphericalenvmapping
-	ssao
+	#ssao
 	#stencilbuffer
 	#subpasses
-	#terraintessellation
-	#tessellation
+	terraintessellation
+	tessellation
 	#textoverlay
 	#texture
 	#texture3d
