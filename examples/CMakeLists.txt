@@ -139,14 +139,14 @@ set(EXAMPLES
 	#pushdescriptors
 	#radialblur
 	#rayquery
-	raytracingbasic
+	#raytracingbasic
 	#raytracingcallable
 	#raytracinggltf
 	#raytracingintersection
 	#raytracingreflections
 	#raytracingpositionfetch
 	#raytracingsbtdata
-	#raytracingshadows
+	raytracingshadows
 	#raytracingtextures
 	#renderheadless
 	#screenshot
@@ -159,8 +159,8 @@ set(EXAMPLES
 	#ssao
 	#stencilbuffer
 	#subpasses
-	terraintessellation
-	tessellation
+	#terraintessellation
+	#tessellation
 	#textoverlay
 	#texture
 	#texture3d
@@ -172,7 +172,7 @@ set(EXAMPLES
 	#triangle
 	#variablerateshading
 	#vertexattributes
-	viewportarray
+	#viewportarray
 	#vulkanscene
 )
 

@@ -1173,11 +1173,6 @@ void vkglTF::Model::loadFromFile(std::string filename, vks::VulkanDevice *device
 	} else {
 		gltfContext.SetImageLoader(loadImageDataFunc, nullptr);
 	}
-#if defined(__ANDROID__)
-	// On Android all assets are packed with the apk in a compressed form, so we need to open them using the asset manager
-	// We let tinygltf handle this, by passing the asset manager of our app
-	tinygltf::asset_manager = androidApp->activity->assetManager;
-#endif
 	size_t pos = filename.find_last_of('/');
 	path = filename.substr(0, pos);
 
@@ -1185,11 +1180,6 @@ void vkglTF::Model::loadFromFile(std::string filename, vks::VulkanDevice *device
 
 	this->device = device;
 
-#if defined(__ANDROID__)
-	// On Android all assets are packed with the apk in a compressed form, so we need to open them using the asset manager
-	// We let tinygltf handle this, by passing the asset manager of our app
-	tinygltf::asset_manager = androidApp->activity->assetManager;
-#endif
 	bool fileLoaded = gltfContext.LoadASCIIFromFile(&gltfModel, &error, &warning, filename);
 
 	std::vector<uint32_t> indexBuffer;

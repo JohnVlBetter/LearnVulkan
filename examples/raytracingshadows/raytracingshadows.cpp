@@ -1,13 +1,3 @@
-/*
-* Vulkan Example - Hardware accelerated ray tracing shadow example
-*
-* Renders a complex scene using multiple hit and miss shaders for implementing shadows
-*
-* Copyright (C) by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "VulkanRaytracingSample.h"
 #include "VulkanglTFModel.h"
 
