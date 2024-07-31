@@ -1,11 +1,3 @@
-/*
-* Vulkan Example - Basic hardware accelerated ray tracing example
-*
-* Copyright (C) 2019-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 
 // Holds data for a ray tracing scratch buffer that is used as a temporary storage

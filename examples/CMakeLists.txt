@@ -139,7 +139,7 @@ set(EXAMPLES
 	#pushdescriptors
 	#radialblur
 	#rayquery
-	#raytracingbasic
+	raytracingbasic
 	#raytracingcallable
 	#raytracinggltf
 	#raytracingintersection
