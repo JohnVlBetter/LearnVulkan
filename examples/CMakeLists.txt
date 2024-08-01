@@ -143,7 +143,7 @@ set(EXAMPLES
 	#raytracingcallable
 	#raytracinggltf
 	#raytracingintersection
-	#raytracingreflections
+	raytracingreflections
 	#raytracingpositionfetch
 	#raytracingsbtdata
 	raytracingshadows
