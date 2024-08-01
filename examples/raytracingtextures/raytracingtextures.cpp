@@ -1,22 +1,3 @@
-/*
- * Vulkan Example - Texture mapping with transparency using accelerated ray tracing example
- *
- * Copyright (C) 2024 by Sascha Willems - www.saschawillems.de
- *
- * This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
- */
-
-/*
- * This hardware accelerated ray tracing sample renders a texture mapped quad with transparency
- * The sample also makes use of buffer device addresses to pass references for vertex and index buffers
- * to the shader, making data access a bit more straightforward than using descriptors.
- * Buffer references themselves are then simply set at draw time using push constants.
- * In addition to a closest hit shader, that now samples from the texture, an any hit shader is
- * added to the closest hit shader group. We use this shader to check if the texel we want to
- * sample at the currently hit ray position is transparent, and if that's the case the any hit
- * shader will cancel the intersection.
- */
-
 #include "VulkanRaytracingSample.h"
 
 class VulkanExample : public VulkanRaytracingSample

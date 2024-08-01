@@ -147,7 +147,7 @@ set(EXAMPLES
 	#raytracingpositionfetch
 	#raytracingsbtdata
 	raytracingshadows
-	#raytracingtextures
+	raytracingtextures
 	#renderheadless
 	#screenshot
 	#shaderobjects
