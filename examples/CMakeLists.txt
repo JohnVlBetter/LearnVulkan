@@ -140,14 +140,14 @@ set(EXAMPLES
 	#radialblur
 	#rayquery
 	#raytracingbasic
-	#raytracingcallable
+	raytracingcallable
 	#raytracinggltf
 	#raytracingintersection
-	raytracingreflections
+	#raytracingreflections
 	#raytracingpositionfetch
 	#raytracingsbtdata
-	raytracingshadows
-	raytracingtextures
+	#raytracingshadows
+	#raytracingtextures
 	#renderheadless
 	#screenshot
 	#shaderobjects

@@ -1,15 +1,3 @@
-/*
-* Vulkan Example - Hardware accelerated ray tracing callable shaders example
-*
-* Dynamically calls different shaders based on the geometry id in the closest hit shader
-*
-* Relevant code parts are marked with [POI]
-*
-* Copyright (C) 2021-2024 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "VulkanRaytracingSample.h"
 
 class VulkanExample : public VulkanRaytracingSample
