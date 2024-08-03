@@ -1,16 +1,3 @@
-/*
- * Vulkan Example - Hardware accelerated ray tracing intersection shader samples
- * 
- * Copyright (C) 2023-2024 by Sascha Willems - www.saschawillems.de
- *
- * This sample uses intersection shaders for doing prodcedural ray traced geometry
- * Instead of passing actual geometry, this samples only passes bounding boxes and sphere descriptions
- * The bounding boxes are used for the ray traversal and the sphere intersections are done
- * within the intersection shader
- *
- * This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
- */
-
 #include "VulkanRaytracingSample.h"
 
 class VulkanExample : public VulkanRaytracingSample
