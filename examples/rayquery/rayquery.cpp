@@ -1,14 +1,3 @@
-/*
-* Vulkan Example - Using ray queries for hardware accelerated ray tracing
-*
-* Ray queries (aka inline ray tracing) can be used in non-raytracing shaders. This sample makes use of that by
-* doing ray traced shadows in a fragment shader
-*
-* Copyright (C) 2020-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 #include "VulkanRaytracingSample.h"

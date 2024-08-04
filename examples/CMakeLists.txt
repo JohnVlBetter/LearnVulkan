@@ -138,13 +138,13 @@ set(EXAMPLES
 	#pushconstants
 	#pushdescriptors
 	#radialblur
-	#rayquery
+	rayquery
 	#raytracingbasic
 	#raytracingcallable
-	raytracinggltf
-	raytracingintersection
+	#raytracinggltf
+	#raytracingintersection
 	#raytracingreflections
-	#raytracingpositionfetch
+	raytracingpositionfetch
 	#raytracingsbtdata
 	#raytracingshadows
 	#raytracingtextures
