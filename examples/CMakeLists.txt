@@ -102,8 +102,8 @@ set(EXAMPLES
 	#descriptorbuffer
 	#descriptorindexing
 	#descriptorsets
-	displacement
-	#distancefieldfonts
+	#displacement
+	distancefieldfonts
 	#dynamicrendering
 	#dynamicstate
 	#dynamicuniformbuffer	
@@ -115,7 +115,7 @@ set(EXAMPLES
 	#graphicspipelinelibrary
 	#hdr
 	#hostimagecopy
-	#imgui
+	imgui
 	#indirectdraw
 	#inlineuniformblocks
 	#inputattachments
@@ -138,13 +138,13 @@ set(EXAMPLES
 	#pushconstants
 	#pushdescriptors
 	#radialblur
-	rayquery
+	#rayquery
 	#raytracingbasic
 	#raytracingcallable
 	#raytracinggltf
 	#raytracingintersection
 	#raytracingreflections
-	raytracingpositionfetch
+	#raytracingpositionfetch
 	#raytracingsbtdata
 	#raytracingshadows
 	#raytracingtextures
@@ -161,7 +161,7 @@ set(EXAMPLES
 	#subpasses
 	#terraintessellation
 	#tessellation
-	#textoverlay
+	textoverlay
 	#texture
 	#texture3d
 	#texturearray

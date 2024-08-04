@@ -1,15 +1,3 @@
-/*
-* Vulkan Example - Font rendering using signed distance fields
-* 
-* This sample compares rendering resolution independent fonts using signed distance fields to traditional bitmap fonts
-*
-* Font generated using https://github.com/libgdx/libgdx/wiki/Hiero
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 
 // Vertex layout for this example
@@ -111,26 +99,9 @@ public:
 	{
 		std::string fileName = getAssetPath() + "font.fnt";
 
-#if defined(__ANDROID__)
-		// Font description file is stored inside the apk
-		// So we need to load it using the asset manager
-		AAsset* asset = AAssetManager_open(androidApp->activity->assetManager, fileName.c_str(), AASSET_MODE_STREAMING);
-		assert(asset);
-		size_t size = AAsset_getLength(asset);
-
-		assert(size > 0);
-
-		void *fileData = malloc(size);
-		AAsset_read(asset, fileData, size);
-		AAsset_close(asset);
-
-		std::stringbuf sbuf((const char*)fileData);
-		std::istream istream(&sbuf);
-#else
 		std::filebuf fileBuffer;
 		fileBuffer.open(fileName, std::ios::in);
 		std::istream istream(&fileBuffer);
-#endif
 
 		assert(istream.good());
 

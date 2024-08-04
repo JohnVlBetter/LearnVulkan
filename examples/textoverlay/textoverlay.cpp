@@ -1,14 +1,3 @@
-/*
-* Vulkan Example - Text overlay rendering on-top of an existing scene using a separate render pass
-*
-* This sample renders a basic text overlay on top of a 3D scene that can be used e.g. for debug purposes
-* For a more complete GUI sample see the ImGui sample
-* 
-* Copyright (C) 2016-2024 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include <sstream>
 #include <iomanip>
 #include "vulkanexamplebase.h"
@@ -557,11 +546,8 @@ public:
 		glm::vec3 projected = glm::project(glm::vec3(0.0f), uniformData.modelView, uniformData.projection, glm::vec4(0, 0, (float)width, (float)height));
 		textOverlay->addText("A torus knot", projected.x, projected.y, TextOverlay::alignCenter);
 
-#if defined(__ANDROID__)
-#else
 		textOverlay->addText("Press \"space\" to toggle text overlay", 5.0f * ui.scale, 65.0f * ui.scale, TextOverlay::alignLeft);
 		textOverlay->addText("Hold middle mouse button and drag to move", 5.0f * ui.scale, 85.0f * ui.scale, TextOverlay::alignLeft);
-#endif
 		textOverlay->endTextUpdate();
 
 		// If the no. of letters changed, the no. of draw commands also changes which requires a rebuild of the command buffers

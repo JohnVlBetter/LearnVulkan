@@ -1,11 +1,3 @@
-/*
-* Vulkan Example - imGui (https://github.com/ocornut/imgui)
-*
-* Copyright (C) 2017-2024 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include <imgui.h>
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
@@ -100,7 +92,6 @@ public:
 		ImGuiIO& io = ImGui::GetIO();
 		io.DisplaySize = ImVec2(width, height);
 		io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
-#if defined(_WIN32)
 		// If we directly work with os specific key codes, we need to map special key types like tab
 		io.KeyMap[ImGuiKey_Tab] = VK_TAB;
 		io.KeyMap[ImGuiKey_LeftArrow] = VK_LEFT;
@@ -111,7 +102,6 @@ public:
 		io.KeyMap[ImGuiKey_Enter] = VK_RETURN;
 		io.KeyMap[ImGuiKey_Space] = VK_SPACE;
 		io.KeyMap[ImGuiKey_Delete] = VK_DELETE;
-#endif
 	}
 
 	void setStyle(uint32_t index)
@@ -808,7 +798,6 @@ public:
 	}
 
 // Input handling is platform specific, to show how it's basically done this sample implements it for Windows
-#if defined(_WIN32)
 	virtual void OnHandleMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		ImGuiIO& io = ImGui::GetIO();
 		// Only react to keyboard input if ImGui is active
@@ -828,7 +817,6 @@ public:
 			}
 		}
 	}
-#endif
 
 };
 
