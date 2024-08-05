@@ -87,7 +87,7 @@ set(EXAMPLES
 	#bloom
 	#computecloth
 	#computecullandlod
-	#computeheadless
+	computeheadless
 	#computenbody
 	#computeparticles
 	#computeraytracing
@@ -137,7 +137,7 @@ set(EXAMPLES
 	#pipelinestatistics
 	#pushconstants
 	#pushdescriptors
-	#radialblur
+	radialblur
 	#rayquery
 	#raytracingbasic
 	#raytracingcallable
@@ -148,7 +148,7 @@ set(EXAMPLES
 	#raytracingsbtdata
 	#raytracingshadows
 	#raytracingtextures
-	#renderheadless
+	renderheadless
 	#screenshot
 	#shaderobjects
 	#shadowmapping

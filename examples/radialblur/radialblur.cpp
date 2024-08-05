@@ -1,13 +1,3 @@
-/*
-* Vulkan Example - Fullscreen radial blur (Single pass offscreen effect)
-*
-* This samples shows how to implement a simple post-processing effect
-* 
-* Copyright (C) 2016-2024 Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 

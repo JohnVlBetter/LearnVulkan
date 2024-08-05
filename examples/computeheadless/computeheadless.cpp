@@ -1,20 +1,4 @@
-/*
-* Vulkan Example - Minimal headless compute example
-*
-* Copyright (C) 2017-2022 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
-#if defined(_WIN32)
 #pragma comment(linker, "/subsystem:console")
-#elif defined(VK_USE_PLATFORM_ANDROID_KHR)
-#include <android/native_activity.h>
-#include <android/asset_manager.h>
-#include <android_native_app_glue.h>
-#include <android/log.h>
-#include "VulkanAndroid.h"
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,26 +8,15 @@
 #include <iostream>
 #include <algorithm>
 
-#if (defined(VK_USE_PLATFORM_MACOS_MVK) || defined(VK_USE_PLATFORM_METAL_EXT))
-#define VK_ENABLE_BETA_EXTENSIONS
-#endif
 #include <vulkan/vulkan.h>
 #include "VulkanTools.h"
 #include "CommandLineParser.hpp"
-
-#if defined(VK_USE_PLATFORM_ANDROID_KHR)
-android_app* androidapp;
-#endif
 
 #define DEBUG (!NDEBUG)
 
 #define BUFFER_ELEMENTS 32
 
-#if defined(VK_USE_PLATFORM_ANDROID_KHR)
-#define LOG(...) ((void)__android_log_print(ANDROID_LOG_INFO, "vulkanExample", __VA_ARGS__))
-#else
 #define LOG(...) printf(__VA_ARGS__)
-#endif
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugMessageCallback(
 	VkDebugReportFlagsEXT flags,
@@ -127,11 +100,6 @@ public:
 	{
 		LOG("Running headless compute example\n");
 
-#if defined(VK_USE_PLATFORM_ANDROID_KHR)
-		LOG("loading vulkan lib");
-		vks::android::loadVulkanLibrary();
-#endif
-
 		VkApplicationInfo appInfo = {};
 		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 		appInfo.pApplicationName = "Vulkan headless example";
@@ -177,38 +145,10 @@ public:
 			instanceCreateInfo.enabledLayerCount = layerCount;
 		}
 #endif
-#if (defined(VK_USE_PLATFORM_MACOS_MVK) || defined(VK_USE_PLATFORM_METAL_EXT))
-		// SRS - When running on macOS with MoltenVK, enable VK_KHR_get_physical_device_properties2 (required by VK_KHR_portability_subset)
-		instanceExtensions.push_back(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
-#if defined(VK_KHR_portability_enumeration)
-		// SRS - When running on macOS with MoltenVK and VK_KHR_portability_enumeration is defined and supported by the instance, enable the extension and the flag
-		uint32_t instanceExtCount = 0;
-		vkEnumerateInstanceExtensionProperties(nullptr, &instanceExtCount, nullptr);
-		if (instanceExtCount > 0)
-		{
-			std::vector<VkExtensionProperties> extensions(instanceExtCount);
-			if (vkEnumerateInstanceExtensionProperties(nullptr, &instanceExtCount, &extensions.front()) == VK_SUCCESS)
-			{
-				for (VkExtensionProperties extension : extensions)
-				{
-					if (strcmp(extension.extensionName, VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME) == 0)
-					{
-						instanceExtensions.push_back(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
-						instanceCreateInfo.flags = VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
-						break;
-					}
-				}
-			}
-		}
-#endif
-#endif
 		instanceCreateInfo.enabledExtensionCount = (uint32_t)instanceExtensions.size();
 		instanceCreateInfo.ppEnabledExtensionNames = instanceExtensions.data();
 		VK_CHECK_RESULT(vkCreateInstance(&instanceCreateInfo, nullptr, &instance));
 
-#if defined(VK_USE_PLATFORM_ANDROID_KHR)
-		vks::android::loadVulkanFunctions(instance);
-#endif
 #if DEBUG
 		if (layersAvailable) {
 			VkDebugReportCallbackCreateInfoEXT debugReportCreateInfo = {};
@@ -260,26 +200,7 @@ public:
 		deviceCreateInfo.queueCreateInfoCount = 1;
 		deviceCreateInfo.pQueueCreateInfos = &queueCreateInfo;
 		std::vector<const char*> deviceExtensions = {};
-#if (defined(VK_USE_PLATFORM_MACOS_MVK) || defined(VK_USE_PLATFORM_METAL_EXT)) && defined(VK_KHR_portability_subset)
-		// SRS - When running on macOS with MoltenVK and VK_KHR_portability_subset is defined and supported by the device, enable the extension
-		uint32_t deviceExtCount = 0;
-		vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &deviceExtCount, nullptr);
-		if (deviceExtCount > 0)
-		{
-			std::vector<VkExtensionProperties> extensions(deviceExtCount);
-			if (vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &deviceExtCount, &extensions.front()) == VK_SUCCESS)
-			{
-				for (VkExtensionProperties extension : extensions)
-				{
-					if (strcmp(extension.extensionName, VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME) == 0)
-					{
-						deviceExtensions.push_back(VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME);
-						break;
-					}
-				}
-			}
-		}
-#endif
+
 		deviceCreateInfo.enabledExtensionCount = (uint32_t)deviceExtensions.size();
 		deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.data();
 		VK_CHECK_RESULT(vkCreateDevice(physicalDevice, &deviceCreateInfo, nullptr, &device));
@@ -419,11 +340,8 @@ public:
 			VkPipelineShaderStageCreateInfo shaderStage = {};
 			shaderStage.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 			shaderStage.stage = VK_SHADER_STAGE_COMPUTE_BIT;
-#if defined(VK_USE_PLATFORM_ANDROID_KHR)
-			shaderStage.module = vks::tools::loadShader(androidapp->activity->assetManager, (shadersPath + "headless.comp.spv").c_str(), device);
-#else
+
 			shaderStage.module = vks::tools::loadShader((shadersPath + "headless.comp.spv").c_str(), device);
-#endif
 			shaderStage.pName = "main";
 			shaderStage.pSpecializationInfo = &specializationInfo;
 			shaderModule = shaderStage.module;
@@ -582,29 +500,6 @@ public:
 	}
 };
 
-#if defined(VK_USE_PLATFORM_ANDROID_KHR)
-void handleAppCommand(android_app * app, int32_t cmd) {
-	if (cmd == APP_CMD_INIT_WINDOW) {
-		VulkanExample *vulkanExample = new VulkanExample();
-		delete(vulkanExample);
-		ANativeActivity_finish(app->activity);
-	}
-}
-void android_main(android_app* state) {
-	androidapp = state;
-	androidapp->onAppCmd = handleAppCommand;
-	int ident, events;
-	struct android_poll_source* source;
-	while ((ident = ALooper_pollAll(-1, NULL, &events, (void**)&source)) >= 0) {
-		if (source != NULL)	{
-			source->process(androidapp, source);
-		}
-		if (androidapp->destroyRequested != 0) {
-			break;
-		}
-	}
-}
-#else
 int main(int argc, char* argv[]) {
 	commandLineParser.add("help", { "--help" }, 0, "Show help");
 	commandLineParser.add("shaders", { "-s", "--shaders" }, 1, "Select shader type to use (glsl or hlsl)");
@@ -620,4 +515,3 @@ int main(int argc, char* argv[]) {
 	delete(vulkanExample);
 	return 0;
 }
-#endif
