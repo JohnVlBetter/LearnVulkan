@@ -84,10 +84,10 @@ function(buildExamples)
 endfunction(buildExamples)
 
 set(EXAMPLES
-	#bloom
+	bloom
 	#computecloth
 	#computecullandlod
-	computeheadless
+	#computeheadless
 	#computenbody
 	#computeparticles
 	#computeraytracing
@@ -103,7 +103,7 @@ set(EXAMPLES
 	#descriptorindexing
 	#descriptorsets
 	#displacement
-	distancefieldfonts
+	#distancefieldfonts
 	#dynamicrendering
 	#dynamicstate
 	#dynamicuniformbuffer	
@@ -115,7 +115,7 @@ set(EXAMPLES
 	#graphicspipelinelibrary
 	#hdr
 	#hostimagecopy
-	imgui
+	#imgui
 	#indirectdraw
 	#inlineuniformblocks
 	#inputattachments
@@ -128,7 +128,7 @@ set(EXAMPLES
 	#occlusionquery
 	#offscreen
 	#oit
-	#parallaxmapping
+	parallaxmapping
 	#particlesystem
 	#pbrbasic
 	#pbribl
@@ -137,7 +137,7 @@ set(EXAMPLES
 	#pipelinestatistics
 	#pushconstants
 	#pushdescriptors
-	radialblur
+	#radialblur
 	#rayquery
 	#raytracingbasic
 	#raytracingcallable
@@ -148,14 +148,14 @@ set(EXAMPLES
 	#raytracingsbtdata
 	#raytracingshadows
 	#raytracingtextures
-	renderheadless
+	#renderheadless
 	#screenshot
 	#shaderobjects
 	#shadowmapping
 	#shadowmappingomni
 	#shadowmappingcascade
 	#specializationconstants
-	#sphericalenvmapping
+	sphericalenvmapping
 	#ssao
 	#stencilbuffer
 	#subpasses

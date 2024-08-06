@@ -1,15 +1,3 @@
-/*
-* Vulkan Example - Spherical Environment Mapping, using different mat caps stored in an array texture
-*
-* Use +/-/space toggle through different material captures
-*
-* Based on https://www.clicktorelease.com/blog/creating-spherical-environment-mapping-shader
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 

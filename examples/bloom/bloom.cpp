@@ -1,14 +1,5 @@
-/*
-* Vulkan Example - Implements a separable two-pass fullscreen blur (also known as bloom)
-*
-* Copyright (C) 2016 - 2023 Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
-
 
 // Offscreen frame buffer properties
 #define FB_DIM 256
