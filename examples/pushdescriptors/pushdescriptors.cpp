@@ -1,18 +1,3 @@
-/*
-* Vulkan Example - Push descriptors
-*
-* Note: Requires a device that supports the VK_KHR_push_descriptor extension
-*
-* Push descriptors apply the push constants concept to descriptor sets. So instead of creating
-* per-model descriptor sets (along with a pool for each descriptor type) for rendering multiple objects,
-* this example uses push descriptors to pass descriptor sets for per-model textures and matrices
-* at command buffer creation time.
-*
-* Copyright (C) 2018-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 

@@ -1,15 +1,3 @@
-/*
-* Vulkan Example - Conservative rasterization
-*
-* Note: Requires a device that supports the VK_EXT_conservative_rasterization extension
-*
-* Uses an offscreen buffer with lower resolution to demonstrate the effect of conservative rasterization
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 
 class VulkanExample : public VulkanExampleBase

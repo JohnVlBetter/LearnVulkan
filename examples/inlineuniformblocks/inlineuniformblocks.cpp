@@ -1,15 +1,3 @@
-/*
-* Vulkan Example - Using inline uniform blocks for passing data to shader stages at descriptor setup
-
-* Note: Requires a device that supports the VK_EXT_inline_uniform_block extension
-*
-* Relevant code parts are marked with [POI]
-*
-* Copyright (C) 2018-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 

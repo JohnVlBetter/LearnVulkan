@@ -84,7 +84,7 @@ function(buildExamples)
 endfunction(buildExamples)
 
 set(EXAMPLES
-	bloom
+	#bloom
 	#computecloth
 	#computecullandlod
 	#computeheadless
@@ -93,7 +93,7 @@ set(EXAMPLES
 	#computeraytracing
 	#computeshader
 	#conditionalrender
-	#conservativeraster
+	conservativeraster
 	#debugprintf
 	#debugutils
 	#deferred
@@ -117,7 +117,7 @@ set(EXAMPLES
 	#hostimagecopy
 	#imgui
 	#indirectdraw
-	#inlineuniformblocks
+	inlineuniformblocks
 	#inputattachments
 	#instancing
 	#meshshader
@@ -128,7 +128,7 @@ set(EXAMPLES
 	#occlusionquery
 	#offscreen
 	#oit
-	parallaxmapping
+	#parallaxmapping
 	#particlesystem
 	#pbrbasic
 	#pbribl
@@ -136,7 +136,7 @@ set(EXAMPLES
 	#pipelines
 	#pipelinestatistics
 	#pushconstants
-	#pushdescriptors
+	pushdescriptors
 	#radialblur
 	#rayquery
 	#raytracingbasic
@@ -155,13 +155,13 @@ set(EXAMPLES
 	#shadowmappingomni
 	#shadowmappingcascade
 	#specializationconstants
-	sphericalenvmapping
+	#sphericalenvmapping
 	#ssao
 	#stencilbuffer
 	#subpasses
 	#terraintessellation
 	#tessellation
-	textoverlay
+	#textoverlay
 	#texture
 	#texture3d
 	#texturearray
