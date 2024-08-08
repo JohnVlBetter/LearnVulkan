@@ -92,9 +92,9 @@ set(EXAMPLES
 	#computeparticles
 	#computeraytracing
 	#computeshader
-	#conditionalrender
-	conservativeraster
-	#debugprintf
+	conditionalrender
+	#conservativeraster
+	debugprintf
 	#debugutils
 	#deferred
 	#deferredmultisampling
@@ -117,13 +117,13 @@ set(EXAMPLES
 	#hostimagecopy
 	#imgui
 	#indirectdraw
-	inlineuniformblocks
+	#inlineuniformblocks
 	#inputattachments
 	#instancing
 	#meshshader
 	#multisampling
 	#multithreading
-	#multiview
+	multiview
 	#negativeviewportheight	
 	#occlusionquery
 	#offscreen
