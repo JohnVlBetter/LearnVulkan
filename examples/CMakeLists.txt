@@ -92,10 +92,10 @@ set(EXAMPLES
 	#computeparticles
 	#computeraytracing
 	#computeshader
-	conditionalrender
+	#conditionalrender
 	#conservativeraster
-	debugprintf
-	#debugutils
+	#debugprintf
+	debugutils
 	#deferred
 	#deferredmultisampling
 	#deferredshadows
@@ -123,8 +123,8 @@ set(EXAMPLES
 	#meshshader
 	#multisampling
 	#multithreading
-	multiview
-	#negativeviewportheight	
+	#multiview
+	negativeviewportheight	
 	#occlusionquery
 	#offscreen
 	#oit
@@ -136,7 +136,7 @@ set(EXAMPLES
 	#pipelines
 	#pipelinestatistics
 	#pushconstants
-	pushdescriptors
+	#pushdescriptors
 	#radialblur
 	#rayquery
 	#raytracingbasic
@@ -170,7 +170,7 @@ set(EXAMPLES
 	#texturemipmapgen
 	#texturesparseresidency
 	#triangle
-	#variablerateshading
+	variablerateshading
 	#vertexattributes
 	#viewportarray
 	#vulkanscene
