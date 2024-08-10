@@ -1,19 +1,3 @@
-/*
-* Vulkan Example - Example for using printf in shaders to help debugging. Can be used in conjunction with a debugging app like RenderDoc (https://renderdoc.org)
-* 
-* See this whitepaper for details: https://www.lunarg.com/wp-content/uploads/2021/08/Using-Debug-Printf-02August2021.pdf
-*
-* Copyright (C) 2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
-/*
-* The only change required for printf in shaders on the application is enabling the VK_KHR_shader_non_semantic_info extensions
-* The actual printing is done in the shaders (see toon.vert from the glsl/hlsl) folder
-* For glsl shaders that use this feature, the GL_EXT_debug_printf extension needs to be enabled
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
@@ -45,15 +29,6 @@ public:
 
 		// Using printf requires the non semantic info extension to be enabled
 		enabledDeviceExtensions.push_back(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME);
-
-#if (defined(VK_USE_PLATFORM_MACOS_MVK) || defined(VK_USE_PLATFORM_METAL_EXT)) && defined(VK_EXAMPLE_XCODE_GENERATED)
-		// SRS - Force validation on since debugPrintfEXT provided by VK_LAYER_KHRONOS_validation on macOS
-		settings.validation = true;
-		setenv("VK_LAYER_ENABLES", "VK_VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT", 1);
-
-		// SRS - RenderDoc not available on macOS so redirect debugPrintfEXT output to stdout
-		setenv("VK_KHRONOS_VALIDATION_PRINTF_TO_STDOUT", "1", 1);
-#endif
 	}
 
 	~VulkanExample()

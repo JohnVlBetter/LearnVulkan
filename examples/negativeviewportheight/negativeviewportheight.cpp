@@ -1,13 +1,3 @@
-/*
-* Vulkan Example - Using negative viewport heights for changing Vulkan's coordinate system
-*
-* Note: Requires a device that supports VK_KHR_MAINTENANCE1
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 
 class VulkanExample : public VulkanExampleBase

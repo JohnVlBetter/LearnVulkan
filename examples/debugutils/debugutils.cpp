@@ -1,11 +1,3 @@
-/*
-* Vulkan Example - Example for the VK_EXT_debug_utils extension. Can be used in conjunction with a debugging app like RenderDoc (https://renderdoc.org)
-*
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
