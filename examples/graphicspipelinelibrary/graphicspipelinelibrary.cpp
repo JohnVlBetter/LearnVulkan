@@ -1,11 +1,3 @@
-/*
-* Vulkan Example - Using VK_EXT_graphics_pipeline_library
-*
-* Copyright (C) 2022-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 #include <thread>
@@ -197,18 +189,6 @@ public:
 	// So we use a custom function that only loads the required shader information without actually creating the shader module
 	bool loadShaderFile(std::string fileName, ShaderInfo &shaderInfo)
 	{
-#if defined(__ANDROID__)
-		// Load shader from compressed asset
-		AAsset* asset = AAssetManager_open(androidApp->activity->assetManager, fileName, AASSET_MODE_STREAMING);
-		assert(asset);
-		size_t size = AAsset_getLength(asset);
-		assert(size > 0);
-
-		shaderInfo.size = size;
-		shaderInfo.code = new uint32_t[size / 4];
-		AAsset_read(asset, shaderCode, size);
-		AAsset_close(asset);
-#else
 		std::ifstream is(fileName, std::ios::binary | std::ios::in | std::ios::ate);
 
 		if (is.is_open())
@@ -224,7 +204,6 @@ public:
 			throw std::runtime_error("Could open shader file");
 			return false;
 		}
-#endif
 	}
 
 	// Create the shared pipeline parts up-front

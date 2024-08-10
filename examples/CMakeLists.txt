@@ -100,11 +100,11 @@ set(EXAMPLES
 	#deferredmultisampling
 	#deferredshadows
 	#descriptorbuffer
-	#descriptorindexing
+	descriptorindexing
 	#descriptorsets
 	#displacement
 	#distancefieldfonts
-	#dynamicrendering
+	dynamicrendering
 	#dynamicstate
 	#dynamicuniformbuffer	
 	#gears
@@ -112,7 +112,7 @@ set(EXAMPLES
 	#gltfloading
 	#gltfscenerendering
 	#gltfskinning
-	#graphicspipelinelibrary
+	graphicspipelinelibrary
 	#hdr
 	#hostimagecopy
 	#imgui
@@ -120,7 +120,7 @@ set(EXAMPLES
 	inlineuniformblocks
 	#inputattachments
 	#instancing
-	#meshshader
+	meshshader
 	#multisampling
 	#multithreading
 	#multiview

@@ -1,11 +1,3 @@
-/*
- * Vulkan Example - Basic sample for using mesh and task shader to replace the traditional vertex pipeline
- *
- * Copyright (C) 2022-2023 by Sascha Willems - www.saschawillems.de
- *
- * This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
- */
-
 #include "vulkanexamplebase.h"
 #include "VulkanglTFModel.h"
 
