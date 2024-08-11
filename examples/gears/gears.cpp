@@ -1,14 +1,3 @@
-/*
-* Vulkan Example - Drawing multiple animated gears (emulating the look of glxgears)
-* 
-* All gears are using single index, vertex and uniform buffers to show the Vulkan best practices of keeping the no. of buffer/memory allocations to a mimimum
-* We use index offsets and instance indices to offset into the buffers at draw time for each gear
-* 
-* Copyright (C) 2016-2023 by Sascha Willems - www.saschawillems.de
-*
-* This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-*/
-
 #include "vulkanexamplebase.h"
 
 const uint32_t numGears = 3;

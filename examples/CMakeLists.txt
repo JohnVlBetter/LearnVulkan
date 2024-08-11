@@ -95,36 +95,36 @@ set(EXAMPLES
 	#conditionalrender
 	#conservativeraster
 	#debugprintf
-	debugutils
+	#debugutils
 	#deferred
 	#deferredmultisampling
 	#deferredshadows
-	#descriptorbuffer
-	descriptorindexing
+	descriptorbuffer
+	#descriptorindexing
 	#descriptorsets
 	#displacement
 	#distancefieldfonts
-	dynamicrendering
+	#dynamicrendering
 	#dynamicstate
 	#dynamicuniformbuffer	
-	#gears
+	gears
 	#geometryshader
 	#gltfloading
 	#gltfscenerendering
 	#gltfskinning
-	graphicspipelinelibrary
+	#graphicspipelinelibrary
 	#hdr
-	#hostimagecopy
+	hostimagecopy
 	#imgui
 	#indirectdraw
 	#inlineuniformblocks
 	#inputattachments
 	#instancing
-	meshshader
+	#meshshader
 	#multisampling
 	#multithreading
 	#multiview
-	negativeviewportheight	
+	#negativeviewportheight	
 	#occlusionquery
 	#offscreen
 	#oit
@@ -150,7 +150,7 @@ set(EXAMPLES
 	#raytracingtextures
 	#renderheadless
 	#screenshot
-	#shaderobjects
+	shaderobjects
 	#shadowmapping
 	#shadowmappingomni
 	#shadowmappingcascade
@@ -170,10 +170,10 @@ set(EXAMPLES
 	#texturemipmapgen
 	#texturesparseresidency
 	#triangle
-	variablerateshading
+	#variablerateshading
 	#vertexattributes
 	#viewportarray
-	#vulkanscene
+	vulkanscene
 )
 
 buildExamples()
