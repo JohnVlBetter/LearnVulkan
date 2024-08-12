@@ -96,10 +96,10 @@ set(EXAMPLES
 	#conservativeraster
 	#debugprintf
 	#debugutils
-	#deferred
+	deferred
 	#deferredmultisampling
 	#deferredshadows
-	descriptorbuffer
+	#descriptorbuffer
 	#descriptorindexing
 	#descriptorsets
 	#displacement
@@ -107,14 +107,14 @@ set(EXAMPLES
 	#dynamicrendering
 	#dynamicstate
 	#dynamicuniformbuffer	
-	gears
+	#gears
 	#geometryshader
 	#gltfloading
 	#gltfscenerendering
 	#gltfskinning
 	#graphicspipelinelibrary
 	#hdr
-	hostimagecopy
+	#hostimagecopy
 	#imgui
 	#indirectdraw
 	#inlineuniformblocks
@@ -132,7 +132,7 @@ set(EXAMPLES
 	#particlesystem
 	#pbrbasic
 	#pbribl
-	#pbrtexture
+	pbrtexture
 	#pipelines
 	#pipelinestatistics
 	#pushconstants
@@ -150,7 +150,7 @@ set(EXAMPLES
 	#raytracingtextures
 	#renderheadless
 	#screenshot
-	shaderobjects
+	#shaderobjects
 	#shadowmapping
 	#shadowmappingomni
 	#shadowmappingcascade
@@ -173,7 +173,8 @@ set(EXAMPLES
 	#variablerateshading
 	#vertexattributes
 	#viewportarray
-	vulkanscene
+	#vulkanscene
+	defferdandraytracing
 )
 
 buildExamples()
