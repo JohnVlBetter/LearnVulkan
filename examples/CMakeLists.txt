@@ -174,7 +174,7 @@ set(EXAMPLES
 	#vertexattributes
 	#viewportarray
 	#vulkanscene
-	defferdandraytracing
+	deferredandraytracing
 )
 
 buildExamples()
