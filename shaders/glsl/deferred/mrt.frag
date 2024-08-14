@@ -2,6 +2,9 @@
 
 layout (binding = 1) uniform sampler2D samplerColor;
 layout (binding = 2) uniform sampler2D samplerNormalMap;
+layout (binding = 3) uniform sampler2D samplerAO;
+layout (binding = 4) uniform sampler2D samplerMetallic;
+layout (binding = 5) uniform sampler2D samplerRoughness;
 
 layout (location = 0) in vec3 inNormal;
 layout (location = 1) in vec2 inUV;
@@ -26,4 +29,5 @@ void main()
 	outNormal = vec4(tnorm, 1.0);
 
 	outAlbedo = texture(samplerColor, inUV);
+	outAlbedo = texture(samplerMetallic, inUV);
 }
