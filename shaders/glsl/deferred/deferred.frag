@@ -14,7 +14,7 @@ struct Light {
 	float radius;
 };
 
-layout (binding = 4) uniform UBO 
+layout (binding = 5) uniform UBO 
 {
 	Light lights[6];
 	vec4 viewPos;

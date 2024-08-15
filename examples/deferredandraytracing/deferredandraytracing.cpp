@@ -61,7 +61,6 @@ public:
 	struct
 	{
 		VkDescriptorSet model{VK_NULL_HANDLE};
-		VkDescriptorSet floor{VK_NULL_HANDLE};
 		VkDescriptorSet composition{VK_NULL_HANDLE};
 	} descriptorSets;
 
@@ -350,7 +349,7 @@ public:
 
 		VK_CHECK_RESULT(vkCreateRenderPass(device, &renderPassInfo, nullptr, &offScreenFrameBuf.renderPass));
 
-		std::array<VkImageView, 4> attachments;
+		std::array<VkImageView, 5> attachments;
 		attachments[0] = offScreenFrameBuf.position.view;
 		attachments[1] = offScreenFrameBuf.normal.view;
 		attachments[2] = offScreenFrameBuf.albedo.view;
@@ -765,8 +764,6 @@ public:
 		submitInfo.pCommandBuffers = &offScreenCmdBuffer;
 		VK_CHECK_RESULT(vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE));
 
-		// Scene rendering
-
 		// Wait for offscreen semaphore
 		submitInfo.pWaitSemaphores = &offscreenSemaphore;
 		// Signal ready with render complete semaphore
@@ -792,7 +789,7 @@ public:
 	{
 		if (overlay->header("Settings"))
 		{
-			overlay->comboBox("Display", &debugDisplayTarget, {"Final composition", "Position", "Normals", "Albedo", "Specular"});
+			overlay->comboBox("Display", &debugDisplayTarget, {"Final composition", "Position", "Normals", "Albedo", "Specular", "AO", "Metallic", "Roughness"});
 		}
 	}
 };
