@@ -80,7 +80,7 @@ public:
 		int32_t width, height;
 		VkFramebuffer frameBuffer;
 		// One attachment for every component required for a deferred rendering setup
-		FrameBufferAttachment position, normal, albedo;
+		FrameBufferAttachment position, normal, albedo, gbuffer0;
 		FrameBufferAttachment depth;
 		VkRenderPass renderPass;
 	} offScreenFrameBuf{};
@@ -123,6 +123,10 @@ public:
 			vkDestroyImageView(device, offScreenFrameBuf.albedo.view, nullptr);
 			vkDestroyImage(device, offScreenFrameBuf.albedo.image, nullptr);
 			vkFreeMemory(device, offScreenFrameBuf.albedo.mem, nullptr);
+
+			vkDestroyImageView(device, offScreenFrameBuf.gbuffer0.view, nullptr);
+			vkDestroyImage(device, offScreenFrameBuf.gbuffer0.image, nullptr);
+			vkFreeMemory(device, offScreenFrameBuf.gbuffer0.mem, nullptr);
 
 			// Depth attachment
 			vkDestroyImageView(device, offScreenFrameBuf.depth.view, nullptr);
@@ -252,6 +256,12 @@ public:
 			VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
 			&offScreenFrameBuf.albedo);
 
+		// GBuffer 0 (Metallic, Roughness, AO)
+		createAttachment(
+			VK_FORMAT_R8G8B8A8_UNORM,
+			VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+			&offScreenFrameBuf.gbuffer0);
+
 		// Depth attachment
 
 		// Find a suitable depth format
@@ -265,17 +275,17 @@ public:
 			&offScreenFrameBuf.depth);
 
 		// Set up separate renderpass with references to the color and depth attachments
-		std::array<VkAttachmentDescription, 4> attachmentDescs = {};
+		std::array<VkAttachmentDescription, 5> attachmentDescs = {};
 
 		// Init attachment properties
-		for (uint32_t i = 0; i < 4; ++i)
+		for (uint32_t i = 0; i < 5; ++i)
 		{
 			attachmentDescs[i].samples = VK_SAMPLE_COUNT_1_BIT;
 			attachmentDescs[i].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 			attachmentDescs[i].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
 			attachmentDescs[i].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
 			attachmentDescs[i].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-			if (i == 3)
+			if (i == 4)
 			{
 				attachmentDescs[i].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 				attachmentDescs[i].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
@@ -291,15 +301,17 @@ public:
 		attachmentDescs[0].format = offScreenFrameBuf.position.format;
 		attachmentDescs[1].format = offScreenFrameBuf.normal.format;
 		attachmentDescs[2].format = offScreenFrameBuf.albedo.format;
-		attachmentDescs[3].format = offScreenFrameBuf.depth.format;
+		attachmentDescs[3].format = offScreenFrameBuf.gbuffer0.format;
+		attachmentDescs[4].format = offScreenFrameBuf.depth.format;
 
 		std::vector<VkAttachmentReference> colorReferences;
 		colorReferences.push_back({0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL});
 		colorReferences.push_back({1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL});
 		colorReferences.push_back({2, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL});
+		colorReferences.push_back({3, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL});
 
 		VkAttachmentReference depthReference = {};
-		depthReference.attachment = 3;
+		depthReference.attachment = 4;
 		depthReference.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
 		VkSubpassDescription subpass = {};
@@ -342,7 +354,8 @@ public:
 		attachments[0] = offScreenFrameBuf.position.view;
 		attachments[1] = offScreenFrameBuf.normal.view;
 		attachments[2] = offScreenFrameBuf.albedo.view;
-		attachments[3] = offScreenFrameBuf.depth.view;
+		attachments[3] = offScreenFrameBuf.gbuffer0.view;
+		attachments[4] = offScreenFrameBuf.depth.view;
 
 		VkFramebufferCreateInfo fbufCreateInfo = {};
 		fbufCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -386,11 +399,12 @@ public:
 		VkCommandBufferBeginInfo cmdBufInfo = vks::initializers::commandBufferBeginInfo();
 
 		// Clear values for all attachments written in the fragment shader
-		std::array<VkClearValue, 4> clearValues;
+		std::array<VkClearValue, 5> clearValues;
 		clearValues[0].color = {{0.0f, 0.0f, 0.0f, 0.0f}};
 		clearValues[1].color = {{0.0f, 0.0f, 0.0f, 0.0f}};
 		clearValues[2].color = {{0.0f, 0.0f, 0.0f, 0.0f}};
-		clearValues[3].depthStencil = {1.0f, 0};
+		clearValues[3].color = {{0.0f, 0.0f, 0.0f, 0.0f}};
+		clearValues[4].depthStencil = {1.0f, 0};
 
 		VkRenderPassBeginInfo renderPassBeginInfo = vks::initializers::renderPassBeginInfo();
 		renderPassBeginInfo.renderPass = offScreenFrameBuf.renderPass;
@@ -487,7 +501,7 @@ public:
 		// Pool
 		std::vector<VkDescriptorPoolSize> poolSizes = {
 			vks::initializers::descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 8),
-			vks::initializers::descriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 9)};
+			vks::initializers::descriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 10)};
 		VkDescriptorPoolCreateInfo descriptorPoolInfo = vks::initializers::descriptorPoolCreateInfo(poolSizes, 3);
 		VK_CHECK_RESULT(vkCreateDescriptorPool(device, &descriptorPoolInfo, nullptr, &descriptorPool));
 
@@ -501,8 +515,10 @@ public:
 			vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, 2),
 			// Binding 3 : Albedo texture target
 			vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, 3),
-			// Binding 4 : Fragment shader uniform buffer
-			vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT, 4),
+			// Binding 4 : GBuffer0 texture target
+			vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, 4),
+			// Binding 5 : Fragment shader uniform buffer
+			vks::initializers::descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT, 5),
 		};
 		VkDescriptorSetLayoutCreateInfo descriptorLayout = vks::initializers::descriptorSetLayoutCreateInfo(setLayoutBindings);
 		VK_CHECK_RESULT(vkCreateDescriptorSetLayout(device, &descriptorLayout, nullptr, &descriptorSetLayout));
@@ -530,6 +546,12 @@ public:
 				offScreenFrameBuf.albedo.view,
 				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
+		VkDescriptorImageInfo texDescriptorGBuffer0 =
+			vks::initializers::descriptorImageInfo(
+				colorSampler,
+				offScreenFrameBuf.gbuffer0.view,
+				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
 		// Deferred composition
 		VK_CHECK_RESULT(vkAllocateDescriptorSets(device, &allocInfo, &descriptorSets.composition));
 		writeDescriptorSets = {
@@ -539,8 +561,10 @@ public:
 			vks::initializers::writeDescriptorSet(descriptorSets.composition, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 2, &texDescriptorNormal),
 			// Binding 3 : Albedo texture target
 			vks::initializers::writeDescriptorSet(descriptorSets.composition, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 3, &texDescriptorAlbedo),
-			// Binding 4 : Fragment shader uniform buffer
-			vks::initializers::writeDescriptorSet(descriptorSets.composition, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 4, &uniformBuffers.composition.descriptor),
+			// Binding 4 : GBuffer0 texture target
+			vks::initializers::writeDescriptorSet(descriptorSets.composition, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 4, &texDescriptorGBuffer0),
+			// Binding 5 : Fragment shader uniform buffer
+			vks::initializers::writeDescriptorSet(descriptorSets.composition, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 5, &uniformBuffers.composition.descriptor),
 		};
 		vkUpdateDescriptorSets(device, static_cast<uint32_t>(writeDescriptorSets.size()), writeDescriptorSets.data(), 0, nullptr);
 
@@ -614,7 +638,8 @@ public:
 		// Blend attachment states required for all color attachments
 		// This is important, as color write mask will otherwise be 0x0 and you
 		// won't see anything rendered to the attachment
-		std::array<VkPipelineColorBlendAttachmentState, 3> blendAttachmentStates = {
+		std::array<VkPipelineColorBlendAttachmentState, 4> blendAttachmentStates = {
+			vks::initializers::pipelineColorBlendAttachmentState(0xf, VK_FALSE),
 			vks::initializers::pipelineColorBlendAttachmentState(0xf, VK_FALSE),
 			vks::initializers::pipelineColorBlendAttachmentState(0xf, VK_FALSE),
 			vks::initializers::pipelineColorBlendAttachmentState(0xf, VK_FALSE)};

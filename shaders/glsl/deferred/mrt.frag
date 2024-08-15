@@ -15,6 +15,7 @@ layout (location = 4) in vec3 inTangent;
 layout (location = 0) out vec4 outPosition;
 layout (location = 1) out vec4 outNormal;
 layout (location = 2) out vec4 outAlbedo;
+layout (location = 3) out vec4 outGBuffer0;
 
 void main() 
 {
@@ -29,5 +30,8 @@ void main()
 	outNormal = vec4(tnorm, 1.0);
 
 	outAlbedo = texture(samplerColor, inUV);
-	outAlbedo = texture(samplerMetallic, inUV);
+	outGBuffer0 = vec4(texture(samplerAO, inUV).r,
+					   texture(samplerMetallic, inUV).r,
+					   texture(samplerRoughness, inUV).r,
+					   1.0);
 }
