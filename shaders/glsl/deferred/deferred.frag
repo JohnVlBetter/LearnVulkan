@@ -156,7 +156,7 @@ void main()
 	// Gamma correction
 	color = pow(color, vec3(1.0f / 2.2f));
 
-	outFragcolor = vec4(color, 1.0);
+	outFragcolor = vec4(color, texture(samplerAlbedo, inUV).a);
 	
 	// Debug display
 	if (ubo.displayDebugTarget > 0) {
