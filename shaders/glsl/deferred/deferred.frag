@@ -110,53 +110,70 @@ void main()
 	vec3 fragPos = texture(samplerposition, inUV).rgb;
 	vec4 gbuffer0 = texture(samplerGBuffer0, inUV);
 	vec3 N = texture(samplerNormal, inUV).rgb;
-
-	vec3 V = normalize(ubo.viewPos.xyz - fragPos);
-	vec3 R = reflect(-V, N); 
-
-	float metallic = gbuffer0.g;
-	float roughness = gbuffer0.b;
-
-	vec3 F0 = vec3(0.04); 
-	F0 = mix(F0, ALBEDO, metallic);
-
-	vec3 Lo = vec3(0.0);
-
-	#define lightCount 6
 	
-	for(int i = 0; i < lightCount; ++i)
+	if(gbuffer0.a < 0.5)
 	{
-		vec3 L = ubo.lights[i].position.xyz - fragPos;
-		vec3 lightColor = ubo.lights[i].color.rgb;
-		Lo += specularContribution(L, lightColor, V, N, F0, metallic, roughness);
+		//Skybox
+		vec4 color = vec4(fragPos, 1.0);
+
+		// Tone mapping
+		color.rgb = Uncharted2Tonemap(color.rgb * 4.5f);
+		color.rgb = color.rgb * (1.0f / Uncharted2Tonemap(vec3(11.2f)));	
+		// Gamma correction
+		color.rgb = pow(color.rgb, vec3(1.0f / 2.2f));
+
+		outFragcolor = color;
 	}
-	
-	vec2 brdf = texture(samplerBRDFLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;
-	vec3 reflection = prefilteredReflection(R, roughness).rgb;	
-	vec3 irradiance = texture(samplerIrradiance, N).rgb;
+	else
+	{
+		//pbr
+		vec3 V = normalize(ubo.viewPos.xyz - fragPos);
+		vec3 R = reflect(-V, N); 
 
-	// Diffuse based on irradiance
-	vec3 diffuse = irradiance * ALBEDO;	
+		float metallic = gbuffer0.g;
+		float roughness = gbuffer0.b;
 
-	vec3 F = F_SchlickR(max(dot(N, V), 0.0), F0, roughness);
+		vec3 F0 = vec3(0.04); 
+		F0 = mix(F0, ALBEDO, metallic);
 
-	// Specular reflectance
-	vec3 specular = reflection * (F * brdf.x + brdf.y);
+		vec3 Lo = vec3(0.0);
 
-	// Ambient part
-	vec3 kD = 1.0 - F;
-	kD *= 1.0 - metallic;	  
-	vec3 ambient = (kD * diffuse + specular) * gbuffer0.rrr;
-	
-	vec3 color = ambient + Lo;
+		#define lightCount 6
 
-	// Tone mapping
-	color = Uncharted2Tonemap(color * 4.5f);
-	color = color * (1.0f / Uncharted2Tonemap(vec3(11.2f)));	
-	// Gamma correction
-	color = pow(color, vec3(1.0f / 2.2f));
+		for(int i = 0; i < lightCount; ++i)
+		{
+			vec3 L = ubo.lights[i].position.xyz - fragPos;
+			vec3 lightColor = ubo.lights[i].color.rgb;
+			Lo += specularContribution(L, lightColor, V, N, F0, metallic, roughness);
+		}
 
-	outFragcolor = vec4(color, texture(samplerAlbedo, inUV).a);
+		vec2 brdf = texture(samplerBRDFLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;
+		vec3 reflection = prefilteredReflection(R, roughness).rgb;	
+		vec3 irradiance = texture(samplerIrradiance, N).rgb;
+
+		// Diffuse based on irradiance
+		vec3 diffuse = irradiance * ALBEDO;	
+
+		vec3 F = F_SchlickR(max(dot(N, V), 0.0), F0, roughness);
+
+		// Specular reflectance
+		vec3 specular = reflection * (F * brdf.x + brdf.y);
+
+		// Ambient part
+		vec3 kD = 1.0 - F;
+		kD *= 1.0 - metallic;	  
+		vec3 ambient = (kD * diffuse + specular) * gbuffer0.rrr;
+
+		vec3 color = ambient + Lo;
+
+		// Tone mapping
+		color = Uncharted2Tonemap(color * 4.5f);
+		color = color * (1.0f / Uncharted2Tonemap(vec3(11.2f)));	
+		// Gamma correction
+		color = pow(color, vec3(1.0f / 2.2f));
+
+		outFragcolor = vec4(color, texture(samplerAlbedo, inUV).a);
+	}
 	
 	// Debug display
 	if (ubo.displayDebugTarget > 0) {
@@ -178,12 +195,6 @@ void main()
 				break;
 			case 6: 
 				outFragcolor.rgb = gbuffer0.bbb;
-				break;
-			case 7: 
-				outFragcolor.rgb = ambient;
-				break;
-			case 8: 
-				outFragcolor.rgb = Lo;
 				break;
 		}		
 		outFragcolor.a = 1.0;

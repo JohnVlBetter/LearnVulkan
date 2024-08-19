@@ -1415,6 +1415,10 @@ public:
 		VkRect2D scissor = vks::initializers::rect2D(offScreenFrameBuf.width, offScreenFrameBuf.height, 0, 0);
 		vkCmdSetScissor(offScreenCmdBuffer, 0, 1, &scissor);
 
+		vkCmdBindPipeline(offScreenCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelines.skybox);
+		vkCmdBindDescriptorSets(offScreenCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets.skybox, 0, NULL);
+		models.skybox.draw(offScreenCmdBuffer);
+
 		vkCmdBindPipeline(offScreenCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelines.offscreen);
 
 		// We render multiple instances of a model
@@ -1470,10 +1474,6 @@ public:
 
 			VkRect2D scissor = vks::initializers::rect2D(width, height, 0, 0);
 			vkCmdSetScissor(drawCmdBuffers[i], 0, 1, &scissor);
-
-			vkCmdBindDescriptorSets(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets.skybox, 0, NULL);
-			vkCmdBindPipeline(drawCmdBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelines.skybox);
-			models.skybox.draw(drawCmdBuffers[i]);
 
 			// Final composition
 			// This is done by simply drawing a full screen quad
@@ -1642,17 +1642,6 @@ public:
 		// Vertex input state from glTF model for pipeline rendering models
 		pipelineCI.pVertexInputState = vkglTF::Vertex::getPipelineVertexInputState({vkglTF::VertexComponent::Position, vkglTF::VertexComponent::UV, vkglTF::VertexComponent::Color, vkglTF::VertexComponent::Normal, vkglTF::VertexComponent::Tangent});
 
-		// Skybox pipeline (background cube)
-		rasterizationState.cullMode = VK_CULL_MODE_FRONT_BIT;
-		shaderStages[0] = loadShader(getShadersPath() + "deferred/skybox.vert.spv", VK_SHADER_STAGE_VERTEX_BIT);
-		shaderStages[1] = loadShader(getShadersPath() + "deferred/skybox.frag.spv", VK_SHADER_STAGE_FRAGMENT_BIT);
-		VK_CHECK_RESULT(vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineCI, nullptr, &pipelines.skybox));
-
-		rasterizationState.cullMode = VK_CULL_MODE_BACK_BIT;
-		// Offscreen pipeline
-		shaderStages[0] = loadShader(getShadersPath() + "deferred/mrt.vert.spv", VK_SHADER_STAGE_VERTEX_BIT);
-		shaderStages[1] = loadShader(getShadersPath() + "deferred/mrt.frag.spv", VK_SHADER_STAGE_FRAGMENT_BIT);
-
 		// Separate render pass
 		pipelineCI.renderPass = offScreenFrameBuf.renderPass;
 
@@ -1667,6 +1656,17 @@ public:
 
 		colorBlendState.attachmentCount = static_cast<uint32_t>(blendAttachmentStates.size());
 		colorBlendState.pAttachments = blendAttachmentStates.data();
+
+		// Skybox pipeline (background cube)
+		rasterizationState.cullMode = VK_CULL_MODE_FRONT_BIT;
+		shaderStages[0] = loadShader(getShadersPath() + "deferred/skybox.vert.spv", VK_SHADER_STAGE_VERTEX_BIT);
+		shaderStages[1] = loadShader(getShadersPath() + "deferred/skybox.frag.spv", VK_SHADER_STAGE_FRAGMENT_BIT);
+		VK_CHECK_RESULT(vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineCI, nullptr, &pipelines.skybox));
+
+		rasterizationState.cullMode = VK_CULL_MODE_BACK_BIT;
+		// Offscreen pipeline
+		shaderStages[0] = loadShader(getShadersPath() + "deferred/mrt.vert.spv", VK_SHADER_STAGE_VERTEX_BIT);
+		shaderStages[1] = loadShader(getShadersPath() + "deferred/mrt.frag.spv", VK_SHADER_STAGE_FRAGMENT_BIT);
 
 		VK_CHECK_RESULT(vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineCI, nullptr, &pipelines.offscreen));
 	}
@@ -1715,6 +1715,7 @@ public:
 		uboMatrices.view = camera.matrices.view;
 		uboMatrices.camPos = camera.position * -1.0f;
 		uboMatrices.model = glm::mat4(glm::mat3(camera.matrices.view));
+		uboMatrices.model = glm::scale(uboMatrices.model, glm::vec3(2.0f));
 		memcpy(uniformBuffers.skybox.mapped, &uboMatrices, sizeof(uboMatrices));
 	}
 
